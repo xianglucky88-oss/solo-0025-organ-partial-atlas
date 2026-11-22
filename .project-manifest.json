@@ -1,0 +1,524 @@
+{
+  "project_name": "solo-0025-organ-partial-atlas",
+  "project_shape": "fullstack",
+  "modules": [
+    {
+      "id": "contract",
+      "path": "pipeatlas/contract.py",
+      "responsibility": "JSON 与领域字段边界"
+    },
+    {
+      "id": "domain",
+      "path": "pipeatlas/domain.py",
+      "responsibility": "校验音管、开管名单、频峰与温度读数"
+    },
+    {
+      "id": "rules",
+      "path": "pipeatlas/rules.py",
+      "responsibility": "消费归约证据和约束，产生业务判定"
+    },
+    {
+      "id": "artifacts",
+      "path": "pipeatlas/artifacts.py",
+      "responsibility": "成果规范编码、摘要与差分"
+    },
+    {
+      "id": "archive",
+      "path": "pipeatlas/archive.py",
+      "responsibility": "SQLite 历史版本与原子封存"
+    },
+    {
+      "id": "service",
+      "path": "pipeatlas/service.py",
+      "responsibility": "串联归约、比对和历史读取"
+    },
+    {
+      "id": "server",
+      "path": "pipeatlas/server.py",
+      "responsibility": "本机 HTTP 及静态界面入口"
+    },
+    {
+      "id": "workbench",
+      "path": "web/ui.js",
+      "responsibility": "页面状态、样例归约、视图切换与图形编排"
+    },
+    {
+      "id": "reconcile",
+      "path": "pipeatlas/reconcile.py",
+      "responsibility": "联合原始归约事实与业务判定，推导频峰争用组"
+    },
+    {
+      "id": "sessions",
+      "path": "pipeatlas/sessions.py",
+      "responsibility": "复核证据归约"
+    },
+    {
+      "id": "review",
+      "path": "pipeatlas/review.py",
+      "responsibility": "编排按领域事实驱动的可选复核"
+    },
+    {
+      "id": "triage",
+      "path": "pipeatlas/triage.py",
+      "responsibility": "复核证据归约"
+    },
+    {
+      "id": "harmonics",
+      "path": "pipeatlas/harmonics.py",
+      "responsibility": "温度修正的泛音槽及频峰候选图"
+    },
+    {
+      "id": "allocation",
+      "path": "pipeatlas/allocation.py",
+      "responsibility": "双端唯一归属及槽位争用"
+    },
+    {
+      "id": "take_evidence",
+      "path": "pipeatlas/take_evidence.py",
+      "responsibility": "独奏支持的槽位证据和基音复测稳定性"
+    },
+    {
+      "id": "result_table",
+      "path": "web/result-table.js",
+      "responsibility": "结果表及结构化证据明细"
+    },
+    {
+      "id": "version_panel",
+      "path": "web/version-panel.js",
+      "responsibility": "封存选择、版本读取、比对和下载"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "target",
+      "name": "环境换算",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.target",
+      "steps": [
+        "各音管目标频率随温度口径换算",
+        "低音甲 的 频率（赫兹） 为 220"
+      ],
+      "success": "低音甲 的 频率（赫兹） 为 220",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow target",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "candidate",
+      "name": "泛音候选",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.candidate",
+      "steps": [
+        "同频峰可能属于两条音管",
+        "峰乙 的 数量 为 2"
+      ],
+      "success": "峰乙 的 数量 为 2",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow candidate",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation",
+        "take_evidence"
+      ]
+    },
+    {
+      "id": "assign",
+      "name": "归属解算",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.assign",
+      "steps": [
+        "边可争用且每个泛音槽不重复占用",
+        "峰甲 的 状态 为 \"assigned\""
+      ],
+      "success": "峰甲 的 状态 为 \"assigned\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow assign",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation",
+        "take_evidence"
+      ]
+    },
+    {
+      "id": "conflict",
+      "name": "冲突归因",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.conflict",
+      "steps": [
+        "局部歧义单独列出而不是静默选中",
+        "峰乙 的 状态 为 \"contested\""
+      ],
+      "success": "峰乙 的 状态 为 \"contested\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow conflict",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation",
+        "take_evidence"
+      ]
+    },
+    {
+      "id": "coverage",
+      "name": "音管缺测",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.coverage",
+      "steps": [
+        "音管全峰缺失和只缺基音分开",
+        "高音乙 的 状态 为 \"ambiguous\""
+      ],
+      "success": "高音乙 的 状态 为 \"ambiguous\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow coverage",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "tune",
+      "name": "调律核对",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.tune",
+      "steps": [
+        "只把无歧义的一阶峰用于放行",
+        "独管丙 的 状态 为 \"adjust\""
+      ],
+      "success": "独管丙 的 状态 为 \"adjust\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow tune",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "revisit",
+      "name": "复测清单",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.revisit",
+      "steps": [
+        "按漏基音和测量覆盖排序，而非仅按音分",
+        "背管丁 的 复测顺序 为 1"
+      ],
+      "success": "背管丁 的 复测顺序 为 1",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow revisit",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "clusters",
+      "name": "频峰争用组",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.clusters",
+      "steps": [
+        "把未分配的频峰与候选泛音槽按连通分组；峰数多于槽位数说明不可能全归属，峰数未超槽位数也不保证有唯一解。",
+        "峰乙 的 数量 为 2"
+      ],
+      "success": "峰乙 的 数量 为 2",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m pipeatlas.check_flow clusters",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "reconcile",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "compare",
+      "name": "归属差分",
+      "entry": "POST /pipeatlas/api/compare",
+      "steps": [
+        "候选变化不能简化为已归属频率的减法",
+        "异版产生差异，同版无差异，跨对象拒绝"
+      ],
+      "success": "异版产生差异，同版无差异，跨对象拒绝",
+      "failure": "跨对象比对返回 409",
+      "verification": "python3 -m pipeatlas.check_flow compare",
+      "module_ids": [
+        "server",
+        "service",
+        "archive",
+        "artifacts",
+        "version_panel",
+        "result_table"
+      ]
+    },
+    {
+      "id": "seal",
+      "name": "封存版本",
+      "entry": "POST /pipeatlas/api/seal",
+      "steps": [
+        "归属结果绑定温度与开管证据",
+        "同输入仅写入一次，旧版不随对照改变"
+      ],
+      "success": "同输入仅写入一次，旧版不随对照改变",
+      "failure": "非法输入不写入",
+      "verification": "python3 -m pipeatlas.check_flow seal",
+      "module_ids": [
+        "server",
+        "service",
+        "archive",
+        "artifacts",
+        "version_panel",
+        "result_table"
+      ]
+    },
+    {
+      "id": "export",
+      "name": "导出交接",
+      "entry": "GET /pipeatlas/api/export/<摘要>",
+      "steps": [
+        "明示基线规则和回查证据",
+        "下载头有效且内容完整保留历史快照"
+      ],
+      "success": "下载头有效且内容完整保留历史快照",
+      "failure": "未知版本返回 404",
+      "verification": "python3 -m pipeatlas.check_flow export",
+      "module_ids": [
+        "server",
+        "service",
+        "archive",
+        "artifacts",
+        "version_panel"
+      ]
+    },
+    {
+      "id": "takes",
+      "name": "复测批次",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.takes",
+      "steps": [
+        "每批按实际开管名单与当次温度独立归属",
+        "把归约值、状态和来源明细写入 outputs.takes，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow takes",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "isolated",
+      "name": "单管佐证",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.isolated",
+      "steps": [
+        "只接受单管且独占的槽位作为合奏冲突线索",
+        "把归约值、状态和来源明细写入 outputs.isolated，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow isolated",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation",
+        "take_evidence"
+      ]
+    },
+    {
+      "id": "stability",
+      "name": "复测稳定性",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.stability",
+      "steps": [
+        "只比较可信基音按各自温度修正后的音分",
+        "把归约值、状态和来源明细写入 outputs.stability，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow stability",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation",
+        "take_evidence"
+      ]
+    },
+    {
+      "id": "pressure",
+      "name": "槽位拥挤",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.pressure",
+      "steps": [
+        "区分一个频峰的多候选与多个频峰挤同一槽",
+        "把归约值、状态和来源明细写入 outputs.pressure，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow pressure",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "triage",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "harmonics",
+      "name": "相对泛音残差",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.harmonics",
+      "steps": [
+        "缺同管独占基音时不输出相对残差",
+        "把归约值、状态和来源明细写入 outputs.harmonics，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow harmonics",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "triage",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "handoff",
+      "name": "调律交接",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.handoff",
+      "steps": [
+        "区分合奏未决、单管线索、复测漂移与可信交接",
+        "把归约值、状态和来源明细写入 outputs.handoff，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow handoff",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "triage",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation",
+        "take_evidence"
+      ]
+    },
+    {
+      "id": "silence",
+      "name": "开管缺测账",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.silence",
+      "steps": [
+        "只数实际开管的复测，区分缺测与未开",
+        "把归约值、状态和来源明细写入 outputs.silence，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow silence",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "triage",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    }
+  ],
+  "complexity": {
+    "mechanisms": [
+      "error_propagation",
+      "capacity",
+      "policy_rules",
+      "lineage",
+      "export_freeze",
+      "versioning_audit",
+      "idempotency",
+      "batch_transaction",
+      "snapshot_consistency"
+    ]
+  }
+}

@@ -1,0 +1,4672 @@
+{
+  "task_source_schema_version": 1,
+  "cc_feedback_profile": "cc-feedback-2611",
+  "project_domain": "数据工程",
+  "project_subdirection": "其他",
+  "supported_task_types": [
+    "功能开发",
+    "功能优化",
+    "质量保障",
+    "技术讨论",
+    "问题排查与诊断",
+    "泛Agent需求",
+    "项目维护"
+  ],
+  "type_coverage": {
+    "功能开发": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 25 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py",
+        "pipeatlas/artifacts.py"
+      ]
+    },
+    "功能优化": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 25 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py",
+        "pipeatlas/artifacts.py"
+      ]
+    },
+    "质量保障": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 15 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py"
+      ]
+    },
+    "技术讨论": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 15 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py"
+      ]
+    },
+    "问题排查与诊断": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 15 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py"
+      ]
+    },
+    "泛Agent需求": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 15 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py"
+      ]
+    },
+    "项目维护": {
+      "status": "supported",
+      "reason": "在 15 条领域工作流核对到 15 条源码机会；不计为已准入题目。",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py",
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/reconcile.py"
+      ]
+    },
+    "Bugfix": {
+      "status": "no_verified_defect",
+      "reason": "无已核实可复现缺陷作为题目；验证发现的问题在交付前修正。"
+    },
+    "代码重构": {
+      "status": "unsupported",
+      "reason": "当前归约与归档边界已分开，暂无核实的不改变领域行为且足够困难的职责重构方向。"
+    },
+    "依赖升级与迁移": {
+      "status": "unsupported",
+      "reason": "当前离线标准库与 SQLite 环境，未验证独立兼容迁移目标或真实旧制品。"
+    },
+    "部署运维": {
+      "status": "unsupported",
+      "reason": "只声明本机单进程离线运行，没有已核实的部署切换或生产恢复证据。"
+    }
+  },
+  "prompt_contract": {
+    "schema_version": 1,
+    "mode": "integrated",
+    "baseline_tier": "deep-task-ready",
+    "generation_scope": {
+      "mode": "all_supported"
+    },
+    "minimum_active_prompts": {
+      "功能开发": 20,
+      "功能优化": 20,
+      "质量保障": 2,
+      "技术讨论": 2,
+      "问题排查与诊断": 2,
+      "泛Agent需求": 10,
+      "项目维护": 2
+    },
+    "minimum_anchors": {
+      "功能开发": 25,
+      "功能优化": 25,
+      "质量保障": 15,
+      "技术讨论": 15,
+      "问题排查与诊断": 15,
+      "泛Agent需求": 15,
+      "项目维护": 15
+    },
+    "capacity_floor": {
+      "modules": 8,
+      "workflows": 10,
+      "mechanisms": 8,
+      "entities": 8,
+      "state_machines": 5,
+      "extension_seams": 12,
+      "tension_points": 10
+    }
+  },
+  "entities": [
+    {
+      "id": "target",
+      "label": "音温换算结果",
+      "relations": [
+        "packet.outputs.target"
+      ],
+      "invariants": [
+        "各音管目标频率随温度口径换算"
+      ]
+    },
+    {
+      "id": "candidate",
+      "label": "泛音候选结果",
+      "relations": [
+        "packet.outputs.candidate"
+      ],
+      "invariants": [
+        "同频峰可能属于两条音管"
+      ]
+    },
+    {
+      "id": "assign",
+      "label": "独占归属结果",
+      "relations": [
+        "packet.outputs.assign"
+      ],
+      "invariants": [
+        "边可争用且每个泛音槽不重复占用"
+      ]
+    },
+    {
+      "id": "conflict",
+      "label": "冲突证明结果",
+      "relations": [
+        "packet.outputs.conflict"
+      ],
+      "invariants": [
+        "局部歧义单独列出而不是静默选中"
+      ]
+    },
+    {
+      "id": "coverage",
+      "label": "音管缺测结果",
+      "relations": [
+        "packet.outputs.coverage"
+      ],
+      "invariants": [
+        "音管全峰缺失和只缺基音分开"
+      ]
+    },
+    {
+      "id": "tune",
+      "label": "调律核对结果",
+      "relations": [
+        "packet.outputs.tune"
+      ],
+      "invariants": [
+        "只把无歧义的一阶峰用于放行"
+      ]
+    },
+    {
+      "id": "revisit",
+      "label": "复测次序结果",
+      "relations": [
+        "packet.outputs.revisit"
+      ],
+      "invariants": [
+        "按漏基音和测量覆盖排序，而非仅按音分"
+      ]
+    },
+    {
+      "id": "clusters",
+      "label": "频峰争用组结果",
+      "relations": [
+        "packet.outputs.clusters"
+      ],
+      "invariants": [
+        "把未分配的频峰与候选泛音槽按连通分组；峰数多于槽位数说明不可能全归属，峰数未超槽位数也不保证有唯一解。"
+      ]
+    },
+    {
+      "id": "packet",
+      "label": "历史成果",
+      "relations": [
+        "source",
+        "outputs"
+      ],
+      "invariants": [
+        "绑定原始数据、结论与版本摘要"
+      ]
+    },
+    {
+      "id": "takes",
+      "label": "复测批次",
+      "relations": [
+        "packet.outputs.takes"
+      ],
+      "invariants": [
+        "每批按实际开管名单与当次温度独立归属"
+      ]
+    },
+    {
+      "id": "isolated",
+      "label": "单管佐证",
+      "relations": [
+        "packet.outputs.isolated"
+      ],
+      "invariants": [
+        "只接受单管且独占的槽位作为合奏冲突线索"
+      ]
+    },
+    {
+      "id": "stability",
+      "label": "复测稳定性",
+      "relations": [
+        "packet.outputs.stability"
+      ],
+      "invariants": [
+        "只比较可信基音按各自温度修正后的音分"
+      ]
+    },
+    {
+      "id": "pressure",
+      "label": "槽位拥挤",
+      "relations": [
+        "packet.outputs.pressure"
+      ],
+      "invariants": [
+        "区分一个频峰的多候选与多个频峰挤同一槽"
+      ]
+    },
+    {
+      "id": "harmonics",
+      "label": "相对泛音残差",
+      "relations": [
+        "packet.outputs.harmonics"
+      ],
+      "invariants": [
+        "缺同管独占基音时不输出相对残差"
+      ]
+    },
+    {
+      "id": "handoff",
+      "label": "调律交接",
+      "relations": [
+        "packet.outputs.handoff"
+      ],
+      "invariants": [
+        "区分合奏未决、单管线索、复测漂移与可信交接"
+      ]
+    },
+    {
+      "id": "silence",
+      "label": "开管缺测账",
+      "relations": [
+        "packet.outputs.silence"
+      ],
+      "invariants": [
+        "只数实际开管的复测，区分缺测与未开"
+      ]
+    }
+  ],
+  "state_machines": [
+    {
+      "subject": "candidate",
+      "states": [
+        "weak",
+        "outside",
+        "candidate"
+      ],
+      "transitions": [
+        "输入归约→weak",
+        "输入归约→outside",
+        "输入归约→candidate"
+      ],
+      "invariants": [
+        "幅值或候选关系发生变化"
+      ]
+    },
+    {
+      "subject": "assign",
+      "states": [
+        "candidate",
+        "assigned",
+        "ambiguous"
+      ],
+      "transitions": [
+        "输入归约→candidate",
+        "输入归约→assigned",
+        "输入归约→ambiguous"
+      ],
+      "invariants": [
+        "相互唯一时可归属"
+      ]
+    },
+    {
+      "subject": "coverage",
+      "states": [
+        "missing",
+        "ambiguous",
+        "overtone",
+        "covered"
+      ],
+      "transitions": [
+        "输入归约→missing",
+        "输入归约→ambiguous",
+        "输入归约→overtone",
+        "输入归约→covered"
+      ],
+      "invariants": [
+        "新的频峰或开管证据改变覆盖"
+      ]
+    },
+    {
+      "subject": "tune",
+      "states": [
+        "pending",
+        "adjust",
+        "ready"
+      ],
+      "transitions": [
+        "输入归约→pending",
+        "输入归约→adjust",
+        "输入归约→ready"
+      ],
+      "invariants": [
+        "拥有可信基音后方可判定"
+      ]
+    },
+    {
+      "subject": "packet",
+      "states": [
+        "evaluated",
+        "persisted",
+        "downloaded"
+      ],
+      "transitions": [
+        "evaluated->persisted",
+        "persisted->persisted",
+        "persisted->downloaded"
+      ],
+      "invariants": [
+        "内容摘要不能被其他成果重写；同版可多次下载"
+      ]
+    }
+  ],
+  "capability_families": [
+    {
+      "family": "领域音温换算",
+      "occupied_by": [
+        "target"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域泛音候选",
+      "occupied_by": [
+        "candidate"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域独占归属",
+      "occupied_by": [
+        "assign"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域冲突证明",
+      "occupied_by": [
+        "conflict"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域音管缺测",
+      "occupied_by": [
+        "coverage"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域调律核对",
+      "occupied_by": [
+        "tune"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域复测次序",
+      "occupied_by": [
+        "revisit"
+      ],
+      "available": true
+    },
+    {
+      "family": "领域频峰争用组",
+      "occupied_by": [
+        "clusters"
+      ],
+      "available": true
+    },
+    {
+      "family": "导出与冻结",
+      "occupied_by": [
+        "packet"
+      ],
+      "available": true
+    },
+    {
+      "family": "复测批次",
+      "occupied_by": [
+        "takes"
+      ],
+      "available": true
+    },
+    {
+      "family": "单管佐证",
+      "occupied_by": [
+        "isolated"
+      ],
+      "available": true
+    },
+    {
+      "family": "复测稳定性",
+      "occupied_by": [
+        "stability"
+      ],
+      "available": true
+    },
+    {
+      "family": "槽位拥挤",
+      "occupied_by": [
+        "pressure"
+      ],
+      "available": true
+    },
+    {
+      "family": "相对泛音残差",
+      "occupied_by": [
+        "harmonics"
+      ],
+      "available": true
+    },
+    {
+      "family": "调律交接",
+      "occupied_by": [
+        "handoff"
+      ],
+      "available": true
+    },
+    {
+      "family": "开管缺测账",
+      "occupied_by": [
+        "silence"
+      ],
+      "available": true
+    }
+  ],
+  "extension_seams": [
+    {
+      "id": "target-1-dev-extension",
+      "anchor": "环境换算",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.target",
+      "distinct_outcome": "建参考管的跨温标定曲线及回放",
+      "mechanism": "time_semantics",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      }
+    },
+    {
+      "id": "candidate-1-dev-extension",
+      "anchor": "泛音候选",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.candidate",
+      "distinct_outcome": "新增音管开关复测建议器，按候选可区分性挑组合",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      }
+    },
+    {
+      "id": "assign-1-dev-extension",
+      "anchor": "归属解算",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.assign",
+      "distinct_outcome": "离线唯一性证书工具，枚举多解而不覆写原归属",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      }
+    },
+    {
+      "id": "conflict-1-dev-extension",
+      "anchor": "冲突归因",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.conflict",
+      "distinct_outcome": "产生冲突消歧实验结果包，记录实测证伪与剩余候选",
+      "mechanism": "lineage",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      }
+    },
+    {
+      "id": "coverage-1-dev-extension",
+      "anchor": "音管缺测",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.coverage",
+      "distinct_outcome": "建立跨多个采集批次的测量完整验收包",
+      "mechanism": "state_machine",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      }
+    },
+    {
+      "id": "tune-1-dev-extension",
+      "anchor": "调律核对",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.tune",
+      "distinct_outcome": "新增调律前后独立验收成果，考虑温度和可证归属",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      }
+    },
+    {
+      "id": "revisit-1-dev-extension",
+      "anchor": "复测清单",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.revisit",
+      "distinct_outcome": "生成带互斥开管组合与实际批次限制的复测方案",
+      "mechanism": "ranking_reorder",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      }
+    },
+    {
+      "id": "clusters-1-dev-extension",
+      "anchor": "频峰争用组",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.clusters",
+      "distinct_outcome": "新增不足匹配的子集证明供调律员定范围",
+      "mechanism": "capacity",
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      }
+    },
+    {
+      "id": "takes-1-dev-extension",
+      "anchor": "复测批次",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.takes",
+      "distinct_outcome": "导入多次复测包并生成可独立回放的批次索引",
+      "mechanism": "time_semantics",
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      }
+    },
+    {
+      "id": "isolated-1-dev-extension",
+      "anchor": "单管佐证",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.isolated",
+      "distinct_outcome": "构建合奏冲突和单管证据的跨次候选链接包",
+      "mechanism": "lineage",
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      }
+    },
+    {
+      "id": "stability-1-dev-extension",
+      "anchor": "复测稳定性",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.stability",
+      "distinct_outcome": "输出换风箱前后稳定性变化的独立鉴定",
+      "mechanism": "time_semantics",
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      }
+    },
+    {
+      "id": "pressure-1-dev-extension",
+      "anchor": "槽位拥挤",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.pressure",
+      "distinct_outcome": "新增候选图局部占用热区的实验计划",
+      "mechanism": "capacity",
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      }
+    },
+    {
+      "id": "harmonics-1-dev-extension",
+      "anchor": "相对泛音残差",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.harmonics",
+      "distinct_outcome": "生成多次测量的管体非整数倍偏移报告",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      }
+    },
+    {
+      "id": "handoff-1-dev-extension",
+      "anchor": "调律交接",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.handoff",
+      "distinct_outcome": "新增调律交接签收凭据，绑定已证实复测",
+      "mechanism": "state_machine",
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      }
+    },
+    {
+      "id": "silence-1-dev-extension",
+      "anchor": "开管缺测账",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.silence",
+      "distinct_outcome": "生成跨次开管的盲点巡测完成度报告",
+      "mechanism": "state_machine",
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      }
+    },
+    {
+      "id": "target-2-dev-extension",
+      "anchor": "环境换算",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.target",
+      "distinct_outcome": "开发以参考管和已归属基音回算环境温度异常的校准工具",
+      "mechanism": "lineage",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "cents",
+          "harmonic_residuals"
+        ]
+      }
+    },
+    {
+      "id": "candidate-2-dev-extension",
+      "anchor": "泛音候选",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.candidate",
+      "distinct_outcome": "新增导入未归属峰后在封存单管批次检索近邻槽位的功能",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "evaluate",
+          "isolated_support"
+        ]
+      }
+    },
+    {
+      "id": "assign-2-dev-extension",
+      "anchor": "归属解算",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.assign",
+      "distinct_outcome": "增加以实际频峰谱系串联校准前后重命名的成对归属档",
+      "mechanism": "versioning_audit",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/artifacts.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/artifacts.py"
+        ],
+        "functions": [
+          "decide",
+          "compare"
+        ]
+      }
+    },
+    {
+      "id": "coverage-2-dev-extension",
+      "anchor": "音管缺测",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.coverage",
+      "distinct_outcome": "面向现场提供给定时间预算的最小开管完整度实验",
+      "mechanism": "capacity",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "decide",
+          "take_scope"
+        ]
+      }
+    },
+    {
+      "id": "conflict-2-dev-extension",
+      "anchor": "冲突归因",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.conflict",
+      "distinct_outcome": "建立实验员确认的冲突裁定记录及未证保留",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      }
+    },
+    {
+      "id": "tune-2-dev-extension",
+      "anchor": "调律核对",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.tune",
+      "distinct_outcome": "生成整管调律与结构异常需工坊检查的独立路线",
+      "mechanism": "policy_rules",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "harmonic_residuals"
+        ]
+      }
+    },
+    {
+      "id": "revisit-2-dev-extension",
+      "anchor": "复测清单",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.revisit",
+      "distinct_outcome": "为复测路线生成覆盖计划缺口的补测轮次",
+      "mechanism": "scheduling",
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      }
+    },
+    {
+      "id": "clusters-2-dev-extension",
+      "anchor": "频峰争用组",
+      "entry": "POST /pipeatlas/api/evaluate 的 outputs.clusters",
+      "distinct_outcome": "建立跨版簇合并和拆分的谱系工作台",
+      "mechanism": "versioning_audit",
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/artifacts.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/artifacts.py"
+        ],
+        "functions": [
+          "summarize",
+          "compare"
+        ]
+      }
+    },
+    {
+      "id": "stability-2-dev-extension",
+      "anchor": "复测稳定性",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.stability",
+      "distinct_outcome": "新增换标定装置前后的同环境复测对齐",
+      "mechanism": "time_semantics",
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "stability",
+          "cents"
+        ]
+      }
+    },
+    {
+      "id": "harmonics-2-dev-extension",
+      "anchor": "相对泛音残差",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.harmonics",
+      "distinct_outcome": "生成各管泛音序数随批次变化的证据图",
+      "mechanism": "lineage",
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "read_takes"
+        ]
+      }
+    },
+    {
+      "id": "archive-packet",
+      "anchor": "历史成果",
+      "entry": "指定摘要读取成果",
+      "distinct_outcome": "下游可重用固定来源、合同版本和归约结果",
+      "mechanism": "export_freeze"
+    }
+  ],
+  "tension_points": [
+    {
+      "workflow_id": "target",
+      "description": "各音管目标频率随温度口径换算",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "candidate",
+      "description": "同频峰可能属于两条音管",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "assign",
+      "description": "边可争用且每个泛音槽不重复占用",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "conflict",
+      "description": "局部歧义单独列出而不是静默选中",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "coverage",
+      "description": "音管全峰缺失和只缺基音分开",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "tune",
+      "description": "只把无歧义的一阶峰用于放行",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "revisit",
+      "description": "按漏基音和测量覆盖排序，而非仅按音分",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "clusters",
+      "description": "把未分配的频峰与候选泛音槽按连通分组；峰数多于槽位数说明不可能全归属，峰数未超槽位数也不保证有唯一解。",
+      "observable_failure": "非法领域数据返回 400；不产生伪造结果"
+    },
+    {
+      "workflow_id": "compare",
+      "description": "候选变化不能简化为已归属频率的减法",
+      "observable_failure": "跨对象比对返回 409"
+    },
+    {
+      "workflow_id": "seal",
+      "description": "归属结果绑定温度与开管证据",
+      "observable_failure": "非法输入不写入"
+    },
+    {
+      "workflow_id": "export",
+      "description": "明示基线规则和回查证据",
+      "observable_failure": "未知版本返回 404"
+    },
+    {
+      "workflow_id": "takes",
+      "description": "每批按实际开管名单与当次温度独立归属",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    },
+    {
+      "workflow_id": "isolated",
+      "description": "只接受单管且独占的槽位作为合奏冲突线索",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    },
+    {
+      "workflow_id": "stability",
+      "description": "只比较可信基音按各自温度修正后的音分",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    },
+    {
+      "workflow_id": "pressure",
+      "description": "区分一个频峰的多候选与多个频峰挤同一槽",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    },
+    {
+      "workflow_id": "harmonics",
+      "description": "缺同管独占基音时不输出相对残差",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    },
+    {
+      "workflow_id": "handoff",
+      "description": "区分合奏未决、单管线索、复测漂移与可信交接",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    },
+    {
+      "workflow_id": "silence",
+      "description": "只数实际开管的复测，区分缺测与未开",
+      "observable_failure": "复核输入引用非法或超出边界时返回 400；不封存"
+    }
+  ],
+  "prompt_anchors": [
+    {
+      "id": "target-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "环境换算",
+      "subject": "环境换算：建参考管的跨温标定曲线及回放",
+      "state": "环境换算：可消费现有数据但不具备目标制品",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "建参考管的跨温标定曲线及回放",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "target-1-dev-extension"
+    },
+    {
+      "id": "target-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "环境换算",
+      "subject": "环境换算：声部温度不一时按各处记录修正目标并保留名义频率",
+      "state": "环境换算：已有流程需在新输入下维持原约束",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "声部温度不一时按各处记录修正目标并保留名义频率",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "target-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "环境换算",
+      "subject": "环境换算：用相同音分不同实测频率验证温度变换",
+      "state": "环境换算：需用具有辨识力的业务输入确认约束",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "用相同音分不同实测频率验证温度变换",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "target-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "环境换算",
+      "subject": "环境换算：比较统一环境温度与分声部温度的证据成本",
+      "state": "环境换算：现有两层证据不必共享同一设计决策",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "比较统一环境温度与分声部温度的证据成本",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "target-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "环境换算",
+      "subject": "环境换算：定位批次差异到底来自基准温度还是实测温度",
+      "state": "环境换算：观测结果不足以区分可能的上游起因",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "定位批次差异到底来自基准温度还是实测温度",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "target-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "环境换算",
+      "subject": "环境换算：按已知温度算出现场开管频率核对卡",
+      "state": "环境换算：现场已有归约，需要人能使用的交接结果",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "按已知温度算出现场开管频率核对卡",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "target-1-care",
+      "task_type": "项目维护",
+      "capability_family": "环境换算",
+      "subject": "环境换算：维护摄氏温标数据导入与原始标定值记载",
+      "state": "环境换算：旧数据和新采集口径可能长期共存",
+      "invariant": "各批用同一参考温度但各实测温度",
+      "observable": "维护摄氏温标数据导入与原始标定值记载",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "evaluate",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "candidate-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：新增音管开关复测建议器，按候选可区分性挑组合",
+      "state": "泛音候选：可消费现有数据但不具备目标制品",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "新增音管开关复测建议器，按候选可区分性挑组合",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "candidate-1-dev-extension"
+    },
+    {
+      "id": "candidate-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：候选显示接近音分边界的证据并区分强弱峰",
+      "state": "泛音候选：已有流程需在新输入下维持原约束",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "候选显示接近音分边界的证据并区分强弱峰",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "candidate-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：用阈值等号与关管近频输入校验边生成",
+      "state": "泛音候选：需用具有辨识力的业务输入确认约束",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "用阈值等号与关管近频输入校验边生成",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "candidate-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：评议固定音分和可变噪声门槛对边召回的影响",
+      "state": "泛音候选：现有两层证据不必共享同一设计决策",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "评议固定音分和可变噪声门槛对边召回的影响",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "candidate-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：逐因还原目标峰无候选是开管、弱幅还是超差",
+      "state": "泛音候选：观测结果不足以区分可能的上游起因",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "逐因还原目标峰无候选是开管、弱幅还是超差",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "candidate-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：按照现有候选和开管名单列最能区分槽位的两次实测",
+      "state": "泛音候选：现场已有归约，需要人能使用的交接结果",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "按照现有候选和开管名单列最能区分槽位的两次实测",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "candidate-1-care",
+      "task_type": "项目维护",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：维护不同采集设备幅值量纲的验收口径",
+      "state": "泛音候选：旧数据和新采集口径可能长期共存",
+      "invariant": "只在已开槽、幅度门槛及容差内建边",
+      "observable": "维护不同采集设备幅值量纲的验收口径",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "evaluate",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "assign-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "归属解算",
+      "subject": "归属解算：离线唯一性证书工具，枚举多解而不覆写原归属",
+      "state": "归属解算：可消费现有数据但不具备目标制品",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "离线唯一性证书工具，枚举多解而不覆写原归属",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "assign-1-dev-extension"
+    },
+    {
+      "id": "assign-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "归属解算",
+      "subject": "归属解算：对已证实独占结果补出影响它的反向槽候选",
+      "state": "归属解算：已有流程需在新输入下维持原约束",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "对已证实独占结果补出影响它的反向槽候选",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "assign-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "归属解算",
+      "subject": "归属解算：验证单候选峰遇到同槽竞争不能被强占",
+      "state": "归属解算：需用具有辨识力的业务输入确认约束",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "验证单候选峰遇到同槽竞争不能被强占",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "assign-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "归属解算",
+      "subject": "归属解算：评议最大匹配和保守独占在调律现场的选择",
+      "state": "归属解算：现有两层证据不必共享同一设计决策",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "评议最大匹配和保守独占在调律现场的选择",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "assign-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "归属解算",
+      "subject": "归属解算：追踪某峰看似单候选却未归属的另一条入边",
+      "state": "归属解算：观测结果不足以区分可能的上游起因",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "追踪某峰看似单候选却未归属的另一条入边",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "assign-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "归属解算",
+      "subject": "归属解算：把现有独占峰及其可复测条件交接给调律员",
+      "state": "归属解算：现场已有归约，需要人能使用的交接结果",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "把现有独占峰及其可复测条件交接给调律员",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "assign-1-care",
+      "task_type": "项目维护",
+      "capability_family": "归属解算",
+      "subject": "归属解算：规定峰身份更新后如何解释历史归属表",
+      "state": "归属解算：旧数据和新采集口径可能长期共存",
+      "invariant": "频峰和槽须互为唯一",
+      "observable": "规定峰身份更新后如何解释历史归属表",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "assign"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "conflict-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：产生冲突消歧实验结果包，记录实测证伪与剩余候选",
+      "state": "冲突归因：可消费现有数据但不具备目标制品",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "产生冲突消歧实验结果包，记录实测证伪与剩余候选",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "conflict-1-dev-extension"
+    },
+    {
+      "id": "conflict-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：冲突证据保留直接邻接与同组间接关系两层",
+      "state": "冲突归因：已有流程需在新输入下维持原约束",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "冲突证据保留直接邻接与同组间接关系两层",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "conflict-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：构造同一连通分量含两种冲突边的验证",
+      "state": "冲突归因：需用具有辨识力的业务输入确认约束",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "构造同一连通分量含两种冲突边的验证",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "conflict-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：评议现场先隔离单管或逐一关闭干扰管的成本",
+      "state": "冲突归因：现有两层证据不必共享同一设计决策",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "评议现场先隔离单管或逐一关闭干扰管的成本",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "conflict-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：从一峰冲突查到是真竞争还是仅间接分组",
+      "state": "冲突归因：观测结果不足以区分可能的上游起因",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "从一峰冲突查到是真竞争还是仅间接分组",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "conflict-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：整理本版争用中的最少隔离操作与不可下结论项",
+      "state": "冲突归因：现场已有归约，需要人能使用的交接结果",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "整理本版争用中的最少隔离操作与不可下结论项",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "conflict-1-care",
+      "task_type": "项目维护",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：维护歧义状态的车间术语和历史分类对应表",
+      "state": "冲突归因：旧数据和新采集口径可能长期共存",
+      "invariant": "一峰多槽和多峰同槽须区分",
+      "observable": "维护歧义状态的车间术语和历史分类对应表",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "decide",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "coverage-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：建立跨多个采集批次的测量完整验收包",
+      "state": "音管缺测：可消费现有数据但不具备目标制品",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "建立跨多个采集批次的测量完整验收包",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "coverage-1-dev-extension"
+    },
+    {
+      "id": "coverage-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：覆盖增加只有泛音与基音冲突并存的证据组合",
+      "state": "音管缺测：已有流程需在新输入下维持原约束",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "覆盖增加只有泛音与基音冲突并存的证据组合",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "coverage-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：验证有三倍频但无基音时不发覆盖结论",
+      "state": "音管缺测：需用具有辨识力的业务输入确认约束",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "验证有三倍频但无基音时不发覆盖结论",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "coverage-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：评议按开管次数还是成功基音数表达覆盖",
+      "state": "音管缺测：现有两层证据不必共享同一设计决策",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "评议按开管次数还是成功基音数表达覆盖",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "coverage-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：核实某段未被覆盖是没开管还是频峰被共享",
+      "state": "音管缺测：观测结果不足以区分可能的上游起因",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "核实某段未被覆盖是没开管还是频峰被共享",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "coverage-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：根据缺测账与基线覆盖编下次开管计划",
+      "state": "音管缺测：现场已有归约，需要人能使用的交接结果",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "根据缺测账与基线覆盖编下次开管计划",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "coverage-1-care",
+      "task_type": "项目维护",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：规定维修封管期间导出缺测账的解释与交接",
+      "state": "音管缺测：旧数据和新采集口径可能长期共存",
+      "invariant": "只有独占基音才视作覆盖",
+      "observable": "规定维修封管期间导出缺测账的解释与交接",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "tune-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "调律核对",
+      "subject": "调律核对：新增调律前后独立验收成果，考虑温度和可证归属",
+      "state": "调律核对：可消费现有数据但不具备目标制品",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "新增调律前后独立验收成果，考虑温度和可证归属",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "tune-1-dev-extension"
+    },
+    {
+      "id": "tune-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "调律核对",
+      "subject": "调律核对：按调律容差边缘保留当次方向和不确定分组",
+      "state": "调律核对：已有流程需在新输入下维持原约束",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "按调律容差边缘保留当次方向和不确定分组",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "tune-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "调律核对",
+      "subject": "调律核对：用同样绝对误差但正负相反验证调律偏差符号",
+      "state": "调律核对：需用具有辨识力的业务输入确认约束",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "用同样绝对误差但正负相反验证调律偏差符号",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "tune-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "调律核对",
+      "subject": "调律核对：讨论以音分或频率差作为跨音区调律尺度",
+      "state": "调律核对：现有两层证据不必共享同一设计决策",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "讨论以音分或频率差作为跨音区调律尺度",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "tune-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "调律核对",
+      "subject": "调律核对：查出同名音管是否因基音归属变化而出现偏差反向",
+      "state": "调律核对：观测结果不足以区分可能的上游起因",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "查出同名音管是否因基音归属变化而出现偏差反向",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "tune-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "调律核对",
+      "subject": "调律核对：依据实际出场环境整理调律动作和停手条件",
+      "state": "调律核对：现场已有归约，需要人能使用的交接结果",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "依据实际出场环境整理调律动作和停手条件",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "tune-1-care",
+      "task_type": "项目维护",
+      "capability_family": "调律核对",
+      "subject": "调律核对：维护调律器更换后的偏差倍率核对与历史包标注",
+      "state": "调律核对：旧数据和新采集口径可能长期共存",
+      "invariant": "只有可信基音有可用调律偏差",
+      "observable": "维护调律器更换后的偏差倍率核对与历史包标注",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "revisit-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "复测清单",
+      "subject": "复测清单：生成带互斥开管组合与实际批次限制的复测方案",
+      "state": "复测清单：可消费现有数据但不具备目标制品",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "生成带互斥开管组合与实际批次限制的复测方案",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "revisit-1-dev-extension"
+    },
+    {
+      "id": "revisit-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "复测清单",
+      "subject": "复测清单：把同组争用导致的复测需求合并并保留各管缘由",
+      "state": "复测清单：已有流程需在新输入下维持原约束",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "把同组争用导致的复测需求合并并保留各管缘由",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "revisit-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "复测清单",
+      "subject": "复测清单：回归并列优先级下顺序稳定且缺测不会漏派",
+      "state": "复测清单：需用具有辨识力的业务输入确认约束",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "回归并列优先级下顺序稳定且缺测不会漏派",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "revisit-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "复测清单",
+      "subject": "复测清单：评议优先覆盖缺口或优先解决单组困难对现场的影响",
+      "state": "复测清单：现有两层证据不必共享同一设计决策",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "评议优先覆盖缺口或优先解决单组困难对现场的影响",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "revisit-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "复测清单",
+      "subject": "复测清单：找出一管优先级掉落是覆盖变更还是方案分组变更",
+      "state": "复测清单：观测结果不足以区分可能的上游起因",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "找出一管优先级掉落是覆盖变更还是方案分组变更",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "revisit-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "复测清单",
+      "subject": "复测清单：按已有清单形成按房间实际操作的复测交接",
+      "state": "复测清单：现场已有归约，需要人能使用的交接结果",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "按已有清单形成按房间实际操作的复测交接",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "revisit-1-care",
+      "task_type": "项目维护",
+      "capability_family": "复测清单",
+      "subject": "复测清单：维护复测类别变化时旧工单顺序与原因的可读性",
+      "state": "复测清单：旧数据和新采集口径可能长期共存",
+      "invariant": "复测先后由证据状态而非频率高低决定",
+      "observable": "维护复测类别变化时旧工单顺序与原因的可读性",
+      "primary_mechanism": "ranking_reorder",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "clusters-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：新增不足匹配的子集证明供调律员定范围",
+      "state": "频峰争用组：可消费现有数据但不具备目标制品",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "新增不足匹配的子集证明供调律员定范围",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "clusters-1-dev-extension"
+    },
+    {
+      "id": "clusters-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：争用组同时区分局部拥挤与全组峰槽数量",
+      "state": "频峰争用组：已有流程需在新输入下维持原约束",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "争用组同时区分局部拥挤与全组峰槽数量",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "clusters-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：用等峰槽但无法全匹配的连通小图验证不颁发唯一结果",
+      "state": "频峰争用组：需用具有辨识力的业务输入确认约束",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "用等峰槽但无法全匹配的连通小图验证不颁发唯一结果",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "clusters-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：比较按连通组或按最小不足子集复测的业务收益",
+      "state": "频峰争用组：现有两层证据不必共享同一设计决策",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "比较按连通组或按最小不足子集复测的业务收益",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "clusters-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：用候选边解释压测中一个挤占组为什么扩大",
+      "state": "频峰争用组：观测结果不足以区分可能的上游起因",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "用候选边解释压测中一个挤占组为什么扩大",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "clusters-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：从实际争用组分配互不重复的复测集合",
+      "state": "频峰争用组：现场已有归约，需要人能使用的交接结果",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "从实际争用组分配互不重复的复测集合",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "clusters-1-care",
+      "task_type": "项目维护",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：维护争用组键随频峰重新编号时的对照约定",
+      "state": "频峰争用组：旧数据和新采集口径可能长期共存",
+      "invariant": "等峰等槽不保证唯一，峰多于槽不可能全归属",
+      "observable": "维护争用组键随频峰重新编号时的对照约定",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "clusters"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "summarize",
+          "slot_pressure"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "takes-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "复测批次",
+      "subject": "复测批次：导入多次复测包并生成可独立回放的批次索引",
+      "state": "复测批次：可消费现有数据但不具备目标制品",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "导入多次复测包并生成可独立回放的批次索引",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "takes-1-dev-extension"
+    },
+    {
+      "id": "takes-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "复测批次",
+      "subject": "复测批次：复测批次显示可判断基音数量和证据丢失原因",
+      "state": "复测批次：已有流程需在新输入下维持原约束",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "复测批次显示可判断基音数量和证据丢失原因",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "takes-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "复测批次",
+      "subject": "复测批次：用同频不同开管状态证明各批候选不串",
+      "state": "复测批次：需用具有辨识力的业务输入确认约束",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "用同频不同开管状态证明各批候选不串",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "takes-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "复测批次",
+      "subject": "复测批次：评估由封存批次或现场临时批次驱动重放的取舍",
+      "state": "复测批次：现有两层证据不必共享同一设计决策",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "评估由封存批次或现场临时批次驱动重放的取舍",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "takes-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "复测批次",
+      "subject": "复测批次：比对一批归属数量变小是否因开管换位",
+      "state": "复测批次：观测结果不足以区分可能的上游起因",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "比对一批归属数量变小是否因开管换位",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "takes-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "复测批次",
+      "subject": "复测批次：汇总实验员零散采集记录并指出不能算进基音的批次",
+      "state": "复测批次：现场已有归约，需要人能使用的交接结果",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "汇总实验员零散采集记录并指出不能算进基音的批次",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "takes-1-care",
+      "task_type": "项目维护",
+      "capability_family": "复测批次",
+      "subject": "复测批次：写清当次传感器温度无有效记录时的归档约束",
+      "state": "复测批次：旧数据和新采集口径可能长期共存",
+      "invariant": "每批仅用自身开管集合、频峰和温度",
+      "observable": "写清当次传感器温度无有效记录时的归档约束",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "takes"
+      ],
+      "source_anchors": [
+        "pipeatlas/sessions.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/sessions.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "take_scope",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "isolated-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：构建合奏冲突和单管证据的跨次候选链接包",
+      "state": "单管佐证：可消费现有数据但不具备目标制品",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "构建合奏冲突和单管证据的跨次候选链接包",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "isolated-1-dev-extension"
+    },
+    {
+      "id": "isolated-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：佐证明示两次温度不同但槽位等价的证据和缺失状态",
+      "state": "单管佐证：已有流程需在新输入下维持原约束",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "佐证明示两次温度不同但槽位等价的证据和缺失状态",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "isolated-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：验证单管仍有同槽双峰竞争时不作已确认",
+      "state": "单管佐证：需用具有辨识力的业务输入确认约束",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "验证单管仍有同槽双峰竞争时不作已确认",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "isolated-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：评议单管复测可证槽存在却不能证峰来源的边界",
+      "state": "单管佐证：现有两层证据不必共享同一设计决策",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "评议单管复测可证槽存在却不能证峰来源的边界",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "isolated-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：定位为何已有独立录音但合奏候选仍无有效佐证",
+      "state": "单管佐证：观测结果不足以区分可能的上游起因",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "定位为何已有独立录音但合奏候选仍无有效佐证",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "isolated-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：基于已确证槽位挑选下一次单管复测组合",
+      "state": "单管佐证：现场已有归约，需要人能使用的交接结果",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "基于已确证槽位挑选下一次单管复测组合",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "isolated-1-care",
+      "task_type": "项目维护",
+      "capability_family": "单管佐证",
+      "subject": "单管佐证：维护从旧复测批次号向新唯一标识的谱系说明",
+      "state": "单管佐证：旧数据和新采集口径可能长期共存",
+      "invariant": "单管线索不等于多管峰已唯一归属",
+      "observable": "维护从旧复测批次号向新唯一标识的谱系说明",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "isolated"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "isolated_support",
+          "evaluate"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "stability-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：输出换风箱前后稳定性变化的独立鉴定",
+      "state": "复测稳定性：可消费现有数据但不具备目标制品",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "输出换风箱前后稳定性变化的独立鉴定",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "stability-1-dev-extension"
+    },
+    {
+      "id": "stability-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：稳定性结果并列全组散布与基线到最近有效批次差异",
+      "state": "复测稳定性：已有流程需在新输入下维持原约束",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "稳定性结果并列全组散布与基线到最近有效批次差异",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "stability-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：验证只有泛音的批次不会压低散布",
+      "state": "复测稳定性：需用具有辨识力的业务输入确认约束",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "验证只有泛音的批次不会压低散布",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "stability-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：比较极差与稳健中心对少量有效数据的适用性",
+      "state": "复测稳定性：现有两层证据不必共享同一设计决策",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "比较极差与稳健中心对少量有效数据的适用性",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "stability-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：拆解漂移来自哪次实测与哪张温度记录",
+      "state": "复测稳定性：观测结果不足以区分可能的上游起因",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "拆解漂移来自哪次实测与哪张温度记录",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "stability-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：从已验多次测量挑选能判断需换管的复测证据",
+      "state": "复测稳定性：现场已有归约，需要人能使用的交接结果",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "从已验多次测量挑选能判断需换管的复测证据",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "stability-1-care",
+      "task_type": "项目维护",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：建立稳定阈值换版时跨年交接的口径表",
+      "state": "复测稳定性：旧数据和新采集口径可能长期共存",
+      "invariant": "至少两次可信基音才有温度归一后散布",
+      "observable": "建立稳定阈值换版时跨年交接的口径表",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "stability",
+          "tune_handoff"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "pressure-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：新增候选图局部占用热区的实验计划",
+      "state": "槽位拥挤：可消费现有数据但不具备目标制品",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "新增候选图局部占用热区的实验计划",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "pressure-1-dev-extension"
+    },
+    {
+      "id": "pressure-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：槽位拥挤结果按完全竞争与含备选峰的挤占分层",
+      "state": "槽位拥挤：已有流程需在新输入下维持原约束",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "槽位拥挤结果按完全竞争与含备选峰的挤占分层",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "pressure-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：验证一个峰跨三槽不算三峰拥挤",
+      "state": "槽位拥挤：需用具有辨识力的业务输入确认约束",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "验证一个峰跨三槽不算三峰拥挤",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "pressure-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：评议同时降低门槛或缩小频宽时的假竞争",
+      "state": "槽位拥挤：现有两层证据不必共享同一设计决策",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "评议同时降低门槛或缩小频宽时的假竞争",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "pressure-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：追溯槽位突然拥挤是网扩大还是幅值跨过阈值",
+      "state": "槽位拥挤：观测结果不足以区分可能的上游起因",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "追溯槽位突然拥挤是网扩大还是幅值跨过阈值",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "pressure-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：从峰槽证据整理调律员可排查的优先槽位",
+      "state": "槽位拥挤：现场已有归约，需要人能使用的交接结果",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "从峰槽证据整理调律员可排查的优先槽位",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "pressure-1-care",
+      "task_type": "项目维护",
+      "capability_family": "槽位拥挤",
+      "subject": "槽位拥挤：维护声部命名改动时泛音槽键的稳定性说明",
+      "state": "槽位拥挤：旧数据和新采集口径可能长期共存",
+      "invariant": "反向槽位入度与正向候选数不可混算",
+      "observable": "维护声部命名改动时泛音槽键的稳定性说明",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "pressure"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/reconcile.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/reconcile.py"
+        ],
+        "functions": [
+          "slot_pressure",
+          "summarize"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "harmonics-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：生成多次测量的管体非整数倍偏移报告",
+      "state": "相对泛音残差：可消费现有数据但不具备目标制品",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "生成多次测量的管体非整数倍偏移报告",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "harmonics-1-dev-extension"
+    },
+    {
+      "id": "harmonics-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：相对泛音结果增加实测不确定证据，但不因缺基音输出残差",
+      "state": "相对泛音残差：已有流程需在新输入下维持原约束",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "相对泛音结果增加实测不确定证据，但不因缺基音输出残差",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "harmonics-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：用基音/泛音同偏和只有泛音偏的两组回归区分",
+      "state": "相对泛音残差：需用具有辨识力的业务输入确认约束",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "用基音/泛音同偏和只有泛音偏的两组回归区分",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "harmonics-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：评议以同管基音为参考还是标定绝对频率做结构判断",
+      "state": "相对泛音残差：现有两层证据不必共享同一设计决策",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "评议以同管基音为参考还是标定绝对频率做结构判断",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "harmonics-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：定位泛音残差变化来自焦点峰还是基音漂移",
+      "state": "相对泛音残差：观测结果不足以区分可能的上游起因",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "定位泛音残差变化来自焦点峰还是基音漂移",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "harmonics-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：利用现有基音和残差从多支管筛选需排查管体者",
+      "state": "相对泛音残差：现场已有归约，需要人能使用的交接结果",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "利用现有基音和残差从多支管筛选需排查管体者",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "harmonics-1-care",
+      "task_type": "项目维护",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：写清泛音序数和音分残差的交接校准步骤",
+      "state": "相对泛音残差：旧数据和新采集口径可能长期共存",
+      "invariant": "相对残差须和同管独占基音对照",
+      "observable": "写清泛音序数和音分残差的交接校准步骤",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/rules.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/rules.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "decide"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "handoff-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "调律交接",
+      "subject": "调律交接：新增调律交接签收凭据，绑定已证实复测",
+      "state": "调律交接：可消费现有数据但不具备目标制品",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "新增调律交接签收凭据，绑定已证实复测",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "handoff-1-dev-extension"
+    },
+    {
+      "id": "handoff-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "调律交接",
+      "subject": "调律交接：交接状态列出最先阻断条件和依靠的来源链",
+      "state": "调律交接：已有流程需在新输入下维持原约束",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "交接状态列出最先阻断条件和依靠的来源链",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "handoff-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "调律交接",
+      "subject": "调律交接：覆盖同管基线需调整但新复测漂移的分支",
+      "state": "调律交接：需用具有辨识力的业务输入确认约束",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "覆盖同管基线需调整但新复测漂移的分支",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "handoff-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "调律交接",
+      "subject": "调律交接：比较先标记待调再拒收和直接挂起的风险",
+      "state": "调律交接：现有两层证据不必共享同一设计决策",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "比较先标记待调再拒收和直接挂起的风险",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "handoff-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "调律交接",
+      "subject": "调律交接：追查已稳定的管为何仍未给可调交接",
+      "state": "调律交接：观测结果不足以区分可能的上游起因",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "追查已稳定的管为何仍未给可调交接",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "handoff-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "调律交接",
+      "subject": "调律交接：从交接记录编一份明确可动与不可动的现场工单",
+      "state": "调律交接：现场已有归约，需要人能使用的交接结果",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "从交接记录编一份明确可动与不可动的现场工单",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "handoff-1-care",
+      "task_type": "项目维护",
+      "capability_family": "调律交接",
+      "subject": "调律交接：维护临时允许试调与正式交接的状态对照规范",
+      "state": "调律交接：旧数据和新采集口径可能长期共存",
+      "invariant": "漂移与冲突线索不可直接进入调律",
+      "observable": "维护临时允许试调与正式交接的状态对照规范",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "handoff"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "tune_handoff",
+          "stability"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "silence-1-dev",
+      "task_type": "功能开发",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：生成跨次开管的盲点巡测完成度报告",
+      "state": "开管缺测账：可消费现有数据但不具备目标制品",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "生成跨次开管的盲点巡测完成度报告",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "silence-1-dev-extension"
+    },
+    {
+      "id": "silence-1-opt",
+      "task_type": "功能优化",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：缺测账按曾确认后又丢失和一直未证分列",
+      "state": "开管缺测账：已有流程需在新输入下维持原约束",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "缺测账按曾确认后又丢失和一直未证分列",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "silence-1-qa",
+      "task_type": "质量保障",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：验证基线未开但复测已开可独立进入统计",
+      "state": "开管缺测账：需用具有辨识力的业务输入确认约束",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "验证基线未开但复测已开可独立进入统计",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "可复算的反例与验证证据"
+    },
+    {
+      "id": "silence-1-design",
+      "task_type": "技术讨论",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：评估按基线开管还是全管台账判断漏测",
+      "state": "开管缺测账：现有两层证据不必共享同一设计决策",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "评估按基线开管还是全管台账判断漏测",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "有反例和适用边界的取舍"
+    },
+    {
+      "id": "silence-1-trace",
+      "task_type": "问题排查与诊断",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：区分频峰只在异常批次消失还是取样名单不同",
+      "state": "开管缺测账：观测结果不足以区分可能的上游起因",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "区分频峰只在异常批次消失还是取样名单不同",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "有因果顺序的证据定位"
+    },
+    {
+      "id": "silence-1-agent",
+      "task_type": "泛Agent需求",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：从已存在的开管记录挑真正应补测而非休整的管",
+      "state": "开管缺测账：现场已有归约，需要人能使用的交接结果",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "从已存在的开管记录挑真正应补测而非休整的管",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "用现有成果完成操作交接"
+    },
+    {
+      "id": "silence-1-care",
+      "task_type": "项目维护",
+      "capability_family": "开管缺测账",
+      "subject": "开管缺测账：维护拆下音管不误标为坏测数据的交接规则",
+      "state": "开管缺测账：旧数据和新采集口径可能长期共存",
+      "invariant": "没开管、开了没测到和只有泛音必须区别",
+      "observable": "维护拆下音管不误标为坏测数据的交接规则",
+      "primary_mechanism": "state_machine",
+      "workflow_ids": [
+        "silence"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "silent_openings",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "跨版本可执行的保全规则"
+    },
+    {
+      "id": "target-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "环境换算",
+      "subject": "环境换算：开发以参考管和已归属基音回算环境温度异常的校准工具",
+      "state": "环境换算：可消费现有数据但不具备目标制品",
+      "invariant": "温度共同偏移与管体残差不同",
+      "observable": "开发以参考管和已归属基音回算环境温度异常的校准工具",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "cents",
+          "harmonic_residuals"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "target-2-dev-extension"
+    },
+    {
+      "id": "target-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "环境换算",
+      "subject": "环境换算：目标显示名义频率与当次音分漂移的来源拆解",
+      "state": "环境换算：已有流程需在新输入下维持原约束",
+      "invariant": "温度共同偏移与管体残差不同",
+      "observable": "目标显示名义频率与当次音分漂移的来源拆解",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "target"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "cents",
+          "harmonic_residuals"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "candidate-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：新增导入未归属峰后在封存单管批次检索近邻槽位的功能",
+      "state": "泛音候选：可消费现有数据但不具备目标制品",
+      "invariant": "合奏图由开管上下文决定",
+      "observable": "新增导入未归属峰后在封存单管批次检索近邻槽位的功能",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "evaluate",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "candidate-2-dev-extension"
+    },
+    {
+      "id": "candidate-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "泛音候选",
+      "subject": "泛音候选：候选列表标记经单管实测排除或暂不能排除，维持原匹配规则",
+      "state": "泛音候选：已有流程需在新输入下维持原约束",
+      "invariant": "合奏图由开管上下文决定",
+      "observable": "候选列表标记经单管实测排除或暂不能排除，维持原匹配规则",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "candidate"
+      ],
+      "source_anchors": [
+        "pipeatlas/harmonics.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/harmonics.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "evaluate",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "assign-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "归属解算",
+      "subject": "归属解算：增加以实际频峰谱系串联校准前后重命名的成对归属档",
+      "state": "归属解算：可消费现有数据但不具备目标制品",
+      "invariant": "只有证据可比时才对照归属",
+      "observable": "增加以实际频峰谱系串联校准前后重命名的成对归属档",
+      "primary_mechanism": "versioning_audit",
+      "workflow_ids": [
+        "assign",
+        "compare"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/artifacts.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/artifacts.py"
+        ],
+        "functions": [
+          "decide",
+          "compare"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "assign-2-dev-extension"
+    },
+    {
+      "id": "assign-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "归属解算",
+      "subject": "归属解算：对照已归属到歧义转换时列出失去和新增的决定性候选",
+      "state": "归属解算：已有流程需在新输入下维持原约束",
+      "invariant": "只有证据可比时才对照归属",
+      "observable": "对照已归属到歧义转换时列出失去和新增的决定性候选",
+      "primary_mechanism": "versioning_audit",
+      "workflow_ids": [
+        "assign",
+        "compare"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/artifacts.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/artifacts.py"
+        ],
+        "functions": [
+          "decide",
+          "compare"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "coverage-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：面向现场提供给定时间预算的最小开管完整度实验",
+      "state": "音管缺测：可消费现有数据但不具备目标制品",
+      "invariant": "只计在该批实际开管的覆盖",
+      "observable": "面向现场提供给定时间预算的最小开管完整度实验",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "decide",
+          "take_scope"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "coverage-2-dev-extension"
+    },
+    {
+      "id": "coverage-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "音管缺测",
+      "subject": "音管缺测：覆盖结果拆分每批计划开管与实际观测之偏差",
+      "state": "音管缺测：已有流程需在新输入下维持原约束",
+      "invariant": "只计在该批实际开管的覆盖",
+      "observable": "覆盖结果拆分每批计划开管与实际观测之偏差",
+      "primary_mechanism": "capacity",
+      "workflow_ids": [
+        "coverage"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "decide",
+          "take_scope"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "conflict-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：建立实验员确认的冲突裁定记录及未证保留",
+      "state": "冲突归因：可消费现有数据但不具备目标制品",
+      "invariant": "线索不能变成自动解冲突",
+      "observable": "建立实验员确认的冲突裁定记录及未证保留",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "conflict-2-dev-extension"
+    },
+    {
+      "id": "conflict-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "冲突归因",
+      "subject": "冲突归因：冲突界面并列剩余候选与跨次佐证来源",
+      "state": "冲突归因：已有流程需在新输入下维持原约束",
+      "invariant": "线索不能变成自动解冲突",
+      "observable": "冲突界面并列剩余候选与跨次佐证来源",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "conflict"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/take_evidence.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/take_evidence.py"
+        ],
+        "functions": [
+          "decide",
+          "isolated_support"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "tune-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "调律核对",
+      "subject": "调律核对：生成整管调律与结构异常需工坊检查的独立路线",
+      "state": "调律核对：可消费现有数据但不具备目标制品",
+      "invariant": "有意义的调律需区分整体偏移与泛音异常",
+      "observable": "生成整管调律与结构异常需工坊检查的独立路线",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "harmonic_residuals"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "tune-2-dev-extension"
+    },
+    {
+      "id": "tune-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "调律核对",
+      "subject": "调律核对：调律意见中标识基音可信但泛音偏离源不可判定的情况",
+      "state": "调律核对：已有流程需在新输入下维持原约束",
+      "invariant": "有意义的调律需区分整体偏移与泛音异常",
+      "observable": "调律意见中标识基音可信但泛音偏离源不可判定的情况",
+      "primary_mechanism": "policy_rules",
+      "workflow_ids": [
+        "tune"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "harmonic_residuals"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "revisit-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "复测清单",
+      "subject": "复测清单：为复测路线生成覆盖计划缺口的补测轮次",
+      "state": "复测清单：可消费现有数据但不具备目标制品",
+      "invariant": "未开管不算失败尝试",
+      "observable": "为复测路线生成覆盖计划缺口的补测轮次",
+      "primary_mechanism": "scheduling",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "revisit-2-dev-extension"
+    },
+    {
+      "id": "revisit-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "复测清单",
+      "subject": "复测清单：复测次序对多次同样缺测设置明确升级而非永远同优先级",
+      "state": "复测清单：已有流程需在新输入下维持原约束",
+      "invariant": "未开管不算失败尝试",
+      "observable": "复测次序对多次同样缺测设置明确升级而非永远同优先级",
+      "primary_mechanism": "scheduling",
+      "workflow_ids": [
+        "revisit"
+      ],
+      "source_anchors": [
+        "pipeatlas/rules.py",
+        "pipeatlas/triage.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/rules.py",
+          "pipeatlas/triage.py"
+        ],
+        "functions": [
+          "decide",
+          "silent_openings"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "clusters-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：建立跨版簇合并和拆分的谱系工作台",
+      "state": "频峰争用组：可消费现有数据但不具备目标制品",
+      "invariant": "簇编号不代表实际谱系",
+      "observable": "建立跨版簇合并和拆分的谱系工作台",
+      "primary_mechanism": "versioning_audit",
+      "workflow_ids": [
+        "clusters",
+        "compare"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/artifacts.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/artifacts.py"
+        ],
+        "functions": [
+          "summarize",
+          "compare"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "clusters-2-dev-extension"
+    },
+    {
+      "id": "clusters-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "频峰争用组",
+      "subject": "频峰争用组：版本差分显示成员变化和真正瓶颈变化而非仅更名",
+      "state": "频峰争用组：已有流程需在新输入下维持原约束",
+      "invariant": "簇编号不代表实际谱系",
+      "observable": "版本差分显示成员变化和真正瓶颈变化而非仅更名",
+      "primary_mechanism": "versioning_audit",
+      "workflow_ids": [
+        "clusters",
+        "compare"
+      ],
+      "source_anchors": [
+        "pipeatlas/reconcile.py",
+        "pipeatlas/artifacts.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/reconcile.py",
+          "pipeatlas/artifacts.py"
+        ],
+        "functions": [
+          "summarize",
+          "compare"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "stability-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：新增换标定装置前后的同环境复测对齐",
+      "state": "复测稳定性：可消费现有数据但不具备目标制品",
+      "invariant": "不混入温度未校准结果",
+      "observable": "新增换标定装置前后的同环境复测对齐",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "stability",
+          "cents"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "stability-2-dev-extension"
+    },
+    {
+      "id": "stability-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "复测稳定性",
+      "subject": "复测稳定性：现有稳定性区别单向漂移和异向波动",
+      "state": "复测稳定性：已有流程需在新输入下维持原约束",
+      "invariant": "不混入温度未校准结果",
+      "observable": "现有稳定性区别单向漂移和异向波动",
+      "primary_mechanism": "time_semantics",
+      "workflow_ids": [
+        "stability"
+      ],
+      "source_anchors": [
+        "pipeatlas/take_evidence.py",
+        "pipeatlas/harmonics.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/take_evidence.py",
+          "pipeatlas/harmonics.py"
+        ],
+        "functions": [
+          "stability",
+          "cents"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    },
+    {
+      "id": "harmonics-2-dev",
+      "task_type": "功能开发",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：生成各管泛音序数随批次变化的证据图",
+      "state": "相对泛音残差：可消费现有数据但不具备目标制品",
+      "invariant": "跨批必须同管同序数",
+      "observable": "生成各管泛音序数随批次变化的证据图",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "新增独立业务成果",
+      "extension_seam_id": "harmonics-2-dev-extension"
+    },
+    {
+      "id": "harmonics-2-opt",
+      "task_type": "功能优化",
+      "capability_family": "相对泛音残差",
+      "subject": "相对泛音残差：相对残差面板按已复验和只出现在基线分层",
+      "state": "相对泛音残差：已有流程需在新输入下维持原约束",
+      "invariant": "跨批必须同管同序数",
+      "observable": "相对残差面板按已复验和只出现在基线分层",
+      "primary_mechanism": "lineage",
+      "workflow_ids": [
+        "harmonics"
+      ],
+      "source_anchors": [
+        "pipeatlas/triage.py",
+        "pipeatlas/sessions.py"
+      ],
+      "existing_touch_points": {
+        "files": [
+          "pipeatlas/triage.py",
+          "pipeatlas/sessions.py"
+        ],
+        "functions": [
+          "harmonic_residuals",
+          "read_takes"
+        ]
+      },
+      "evidence_kind": "兼容的流程行为"
+    }
+  ]
+}

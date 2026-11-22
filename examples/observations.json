@@ -1,0 +1,66 @@
+{
+  "target": [
+    "低音甲",
+    "hz",
+    220,
+    "低音甲",
+    "state",
+    "closed"
+  ],
+  "candidate": [
+    "峰乙",
+    "count",
+    2,
+    "峰戊",
+    "count",
+    1
+  ],
+  "assign": [
+    "峰甲",
+    "state",
+    "assigned",
+    "峰戊",
+    "pipe",
+    "高音乙"
+  ],
+  "conflict": [
+    "峰乙",
+    "state",
+    "contested",
+    "峰乙",
+    null,
+    null
+  ],
+  "coverage": [
+    "高音乙",
+    "state",
+    "ambiguous",
+    "高音乙",
+    "state",
+    "covered"
+  ],
+  "tune": [
+    "独管丙",
+    "state",
+    "adjust",
+    "独管丙",
+    "state",
+    "ready"
+  ],
+  "revisit": [
+    "背管丁",
+    "rank",
+    1,
+    "高音乙",
+    null,
+    null
+  ],
+  "clusters": [
+    "峰乙",
+    "count",
+    2,
+    "峰乙",
+    null,
+    null
+  ]
+}

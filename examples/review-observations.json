@@ -1,0 +1,58 @@
+{
+  "takes": [
+    "低音隔离",
+    "assigned",
+    1,
+    "独管复测",
+    "count",
+    1
+  ],
+  "isolated": [
+    "峰乙",
+    "state",
+    "supported",
+    "峰乙",
+    null,
+    null
+  ],
+  "stability": [
+    "独管丙",
+    "state",
+    "stable",
+    "独管丙",
+    "state",
+    "drift"
+  ],
+  "pressure": [
+    "低音甲/2",
+    "count",
+    2,
+    "高音乙/1",
+    "state",
+    "assigned"
+  ],
+  "harmonics": [
+    "峰丁",
+    "relative",
+    -11.13337630561278,
+    "峰丁",
+    "state",
+    "known"
+  ],
+  "handoff": [
+    "独管丙",
+    "state",
+    "adjust",
+    "独管丙",
+    "state",
+    "revisit"
+  ],
+  "silence": [
+    "低音甲",
+    "state",
+    "partial",
+    "低音甲",
+    "state",
+    "blind"
+  ]
+}

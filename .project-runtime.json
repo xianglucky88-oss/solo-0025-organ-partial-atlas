@@ -1,0 +1,86 @@
+{
+  "language": "Python 3.11+ / JavaScript ES modules",
+  "project_shape": "fullstack",
+  "source_extensions": [
+    ".py",
+    ".js",
+    ".css",
+    ".html"
+  ],
+  "build_command": "python3 -m compileall -q pipeatlas && node --input-type=module --check < web/ui.js && node --input-type=module --check < web/chart.js && node --input-type=module --check < web/result-table.js && node --input-type=module --check < web/version-panel.js",
+  "testing": "deferred",
+  "workflow_checks": [
+    {
+      "workflow_id": "target",
+      "command": "python3 -m pipeatlas.check_flow target"
+    },
+    {
+      "workflow_id": "candidate",
+      "command": "python3 -m pipeatlas.check_flow candidate"
+    },
+    {
+      "workflow_id": "assign",
+      "command": "python3 -m pipeatlas.check_flow assign"
+    },
+    {
+      "workflow_id": "conflict",
+      "command": "python3 -m pipeatlas.check_flow conflict"
+    },
+    {
+      "workflow_id": "coverage",
+      "command": "python3 -m pipeatlas.check_flow coverage"
+    },
+    {
+      "workflow_id": "tune",
+      "command": "python3 -m pipeatlas.check_flow tune"
+    },
+    {
+      "workflow_id": "revisit",
+      "command": "python3 -m pipeatlas.check_flow revisit"
+    },
+    {
+      "workflow_id": "clusters",
+      "command": "python3 -m pipeatlas.check_flow clusters"
+    },
+    {
+      "workflow_id": "compare",
+      "command": "python3 -m pipeatlas.check_flow compare"
+    },
+    {
+      "workflow_id": "seal",
+      "command": "python3 -m pipeatlas.check_flow seal"
+    },
+    {
+      "workflow_id": "export",
+      "command": "python3 -m pipeatlas.check_flow export"
+    },
+    {
+      "workflow_id": "takes",
+      "command": "python3 -m pipeatlas.check_flow takes"
+    },
+    {
+      "workflow_id": "isolated",
+      "command": "python3 -m pipeatlas.check_flow isolated"
+    },
+    {
+      "workflow_id": "stability",
+      "command": "python3 -m pipeatlas.check_flow stability"
+    },
+    {
+      "workflow_id": "pressure",
+      "command": "python3 -m pipeatlas.check_flow pressure"
+    },
+    {
+      "workflow_id": "harmonics",
+      "command": "python3 -m pipeatlas.check_flow harmonics"
+    },
+    {
+      "workflow_id": "handoff",
+      "command": "python3 -m pipeatlas.check_flow handoff"
+    },
+    {
+      "workflow_id": "silence",
+      "command": "python3 -m pipeatlas.check_flow silence"
+    }
+  ]
+}

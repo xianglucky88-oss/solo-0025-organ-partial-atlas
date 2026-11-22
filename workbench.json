@@ -1,0 +1,274 @@
+{
+  "namespace": "pipeatlas",
+  "title": "音管泛音归属台",
+  "port": 8862,
+  "theme": "organ",
+  "plot": "实测频峰与目标基音",
+  "operations": [
+    {
+      "id": "target",
+      "label": "音温换算",
+      "columns": [
+        "id",
+        "hz",
+        "state"
+      ]
+    },
+    {
+      "id": "candidate",
+      "label": "泛音候选",
+      "columns": [
+        "id",
+        "hz",
+        "amplitude",
+        "count",
+        "evidence",
+        "state"
+      ]
+    },
+    {
+      "id": "assign",
+      "label": "独占归属",
+      "columns": [
+        "id",
+        "hz",
+        "pipe",
+        "harmonic",
+        "deviation",
+        "state"
+      ]
+    },
+    {
+      "id": "conflict",
+      "label": "冲突证明",
+      "columns": [
+        "id",
+        "state",
+        "evidence",
+        "contested"
+      ]
+    },
+    {
+      "id": "coverage",
+      "label": "音管缺测",
+      "columns": [
+        "id",
+        "state",
+        "count",
+        "evidence"
+      ]
+    },
+    {
+      "id": "tune",
+      "label": "调律核对",
+      "columns": [
+        "id",
+        "state",
+        "deviation",
+        "evidence"
+      ]
+    },
+    {
+      "id": "revisit",
+      "label": "复测次序",
+      "columns": [
+        "id",
+        "rank",
+        "state",
+        "evidence"
+      ]
+    },
+    {
+      "id": "clusters",
+      "label": "频峰争用组",
+      "columns": [
+        "id",
+        "count",
+        "slots",
+        "state",
+        "evidence"
+      ]
+    },
+    {
+      "id": "takes",
+      "label": "复测批次",
+      "columns": [
+        "id",
+        "count",
+        "assigned",
+        "pending",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "isolated",
+      "label": "单管佐证",
+      "columns": [
+        "id",
+        "count",
+        "candidates",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "stability",
+      "label": "复测稳定性",
+      "columns": [
+        "id",
+        "count",
+        "spread",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "pressure",
+      "label": "槽位拥挤",
+      "columns": [
+        "id",
+        "count",
+        "exclusive",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "harmonics",
+      "label": "相对泛音残差",
+      "columns": [
+        "id",
+        "pipe",
+        "harmonic",
+        "deviation",
+        "relative",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "handoff",
+      "label": "调律交接",
+      "columns": [
+        "id",
+        "deviation",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "silence",
+      "label": "开管缺测账",
+      "columns": [
+        "id",
+        "count",
+        "observed",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    }
+  ],
+  "values": {
+    "covered": "已覆盖",
+    "pending": "待确定",
+    "ready": "已符合",
+    "open": "已开管",
+    "closed": "未开管",
+    "weak": "低于门限",
+    "candidate": "有候选",
+    "outside": "超出范围",
+    "assigned": "已归属",
+    "ambiguous": "归属不唯一",
+    "contested": "争用同槽",
+    "overtone": "仅有泛音",
+    "missing": "缺测",
+    "adjust": "待调律",
+    "unresolved": "待核实",
+    "added": "新增",
+    "removed": "已移除",
+    "changed": "已变化",
+    "oversubscribed": "峰多于槽",
+    "fits": "有产量",
+    "split": "跨带分摊",
+    "kept": "保留",
+    "scrap": "边料",
+    "single": "单通道",
+    "ensemble": "合奏",
+    "silent": "无开管",
+    "supported": "有支撑",
+    "unconfirmed": "未确认",
+    "stable": "稳定",
+    "drift": "偏移不一致",
+    "review": "交接复核",
+    "revisit": "需要复测",
+    "shared": "多处复用",
+    "same": "口径一致",
+    "refined": "区间收窄",
+    "recovered": "恢复量化",
+    "carried": "传播缺测",
+    "local": "局部缺测",
+    "opposed": "方向不符",
+    "sparse": "邻点稀疏",
+    "unbalanced": "双端峰数不对称",
+    "cycle": "完整循环",
+    "sequence": "序列未闭合",
+    "marked": "有标记"
+  },
+  "columns": {
+    "amplitude": "幅值",
+    "contested": "争用槽位",
+    "count": "数量",
+    "deviation": "音分偏差",
+    "evidence": "来源证据",
+    "harmonic": "泛音阶次",
+    "hz": "频率（赫兹）",
+    "id": "标识",
+    "pipe": "音管",
+    "rank": "复测顺序",
+    "slots": "候选槽数",
+    "stage": "归约阶段",
+    "state": "状态",
+    "before": "早版",
+    "after": "晚版",
+    "origin": "母卷纵向区间",
+    "sample": "取样编号",
+    "observed": "已观测",
+    "modeled": "模型池量",
+    "assigned": "已归属",
+    "pending": "待核对",
+    "relative": "相对音分差",
+    "rate_lo": "通量下界",
+    "rate_hi": "通量上界",
+    "area": "面积",
+    "total": "理论总量",
+    "kept": "保留宽度",
+    "lost": "边料宽度",
+    "used": "占用长度",
+    "remainder": "余量",
+    "candidates": "候选数",
+    "spread": "最大音分差",
+    "exclusive": "单候选数",
+    "h0": "起水位",
+    "h1": "止水位",
+    "source": "供水记录",
+    "gate": "门位",
+    "prior_lo": "原下界",
+    "prior_hi": "原上界",
+    "known": "已知数",
+    "left_count": "甲端峰数",
+    "right_count": "乙端峰数",
+    "mixed": "双因禁保长度",
+    "eligible": "可保长度",
+    "blocked": "重大疵点长度",
+    "blind": "缺检长度"
+  },
+  "reconciliation": "clusters",
+  "defaultOperation": "assign"
+}
