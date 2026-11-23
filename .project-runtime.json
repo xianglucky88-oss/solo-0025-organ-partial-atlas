@@ -81,6 +81,18 @@
     {
       "workflow_id": "silence",
       "command": "python3 -m pipeatlas.check_flow silence"
+    },
+    {
+      "workflow_id": "swap",
+      "command": "python3 -m pipeatlas.check_flow swap"
+    },
+    {
+      "workflow_id": "migration",
+      "command": "python3 -m pipeatlas.check_flow migration"
+    },
+    {
+      "workflow_id": "unaligned",
+      "command": "python3 -m pipeatlas.check_flow unaligned"
     }
   ]
 }

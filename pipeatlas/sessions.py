@@ -1,6 +1,7 @@
 from math import sqrt
 
 from .contract import ident, invariant, num, records
+from .domain import optional_instant
 from .harmonics import evaluate
 from .rules import decide
 
@@ -18,7 +19,8 @@ def read_takes(review, model):
                  for r in records(take.get('peaks'), '复测频峰', 100)]
         temperature = num(take.get('temperature'), '复测温度', 0, 40)
         # Divide by the original reference scale rather than freezing the first take's temperature.
-        configuration = dict(model, opened=set(keys), peaks=peaks,
+        configuration = dict(model, opened=set(keys), peaks=peaks, temperature=temperature,
+                             at=optional_instant(take.get('at'), '复测时刻'),
                              ratio=sqrt((temperature+273.15)/(model['reference']+273.15)))
         result.append((take['id'], configuration, decide(configuration, evaluate(configuration))))
     return result

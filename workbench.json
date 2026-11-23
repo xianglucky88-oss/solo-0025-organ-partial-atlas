@@ -173,6 +173,43 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "swap",
+      "label": "按席位看换管",
+      "columns": [
+        "id",
+        "entity",
+        "count",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "migration",
+      "label": "按实体看迁移",
+      "columns": [
+        "id",
+        "seat",
+        "count",
+        "delta",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "unaligned",
+      "label": "未对齐观测",
+      "columns": [
+        "id",
+        "seat",
+        "at",
+        "state",
+        "evidence"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -190,7 +227,7 @@
     "overtone": "仅有泛音",
     "missing": "缺测",
     "adjust": "待调律",
-    "unresolved": "待核实",
+    "unresolved": "无可信观测",
     "added": "新增",
     "removed": "已移除",
     "changed": "已变化",
@@ -219,7 +256,14 @@
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
     "sequence": "序列未闭合",
-    "marked": "有标记"
+    "marked": "有标记",
+    "swapped": "已换管",
+    "unchanged": "同一实体",
+    "moved": "已迁移",
+    "held": "原位持续",
+    "unbound": "无登记",
+    "conflict": "登记冲突",
+    "untimed": "缺少时刻"
   },
   "columns": {
     "amplitude": "幅值",
@@ -267,7 +311,26 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "entity": "实体",
+    "at": "时刻",
+    "cents": "实体音分",
+    "delta": "迁移差值",
+    "link": "对应记录",
+    "credential": "维修凭据",
+    "entities": "实体序列",
+    "links": "相关登记",
+    "observations": "对齐观测",
+    "excluded": "未纳入观测",
+    "reasons": "未对齐原因",
+    "raw": "原始判定",
+    "trusted": "可信基音",
+    "reference": "实体基准温度",
+    "base": "实体基准频率",
+    "take": "试录批次",
+    "seats": "席位序列",
+    "reason": "原因",
+    "seat": "席位"
   },
   "reconciliation": "clusters",
   "defaultOperation": "assign"

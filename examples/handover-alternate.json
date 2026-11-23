@@ -1,0 +1,235 @@
+{
+  "id": "北廊风箱",
+  "conditions": {
+    "reference": 20,
+    "temperature": 24,
+    "tolerance": 18,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "at": 220,
+  "pipes": [
+    {
+      "id": "低音甲",
+      "base": 220,
+      "maximum": 4
+    },
+    {
+      "id": "高音乙",
+      "base": 440,
+      "maximum": 3
+    },
+    {
+      "id": "独管丙",
+      "base": 310,
+      "maximum": 3
+    },
+    {
+      "id": "背管丁",
+      "base": 520,
+      "maximum": 2
+    },
+    {
+      "id": "备管己",
+      "base": 308,
+      "maximum": 3
+    },
+    {
+      "id": "侧管庚",
+      "base": 660,
+      "maximum": 3
+    },
+    {
+      "id": "副管辛",
+      "base": 700,
+      "maximum": 3
+    },
+    {
+      "id": "边管壬",
+      "base": 780,
+      "maximum": 3
+    }
+  ],
+  "opened": [
+    "低音甲",
+    "独管丙"
+  ],
+  "peaks": [
+    {
+      "id": "甲峰",
+      "hz": 221.5,
+      "amplitude": 0.9
+    },
+    {
+      "id": "丙峰",
+      "hz": 312.1,
+      "amplitude": 0.8
+    }
+  ],
+  "review": {
+    "takes": [
+      {
+        "id": "丙迁后",
+        "at": 250,
+        "temperature": 24,
+        "opened": [
+          "备管己"
+        ],
+        "peaks": [
+          {
+            "id": "己峰",
+            "hz": 310.9,
+            "amplitude": 0.8
+          }
+        ]
+      },
+      {
+        "id": "甲换后",
+        "at": 260,
+        "temperature": 24,
+        "opened": [
+          "低音甲"
+        ],
+        "peaks": [
+          {
+            "id": "甲测三",
+            "hz": 221.0,
+            "amplitude": 0.9
+          }
+        ]
+      }
+    ],
+    "stability_limit": 8,
+    "registry": {
+      "entities": [
+        {
+          "id": "甲一",
+          "base": 220.0,
+          "reference": 20
+        },
+        {
+          "id": "甲二",
+          "base": 218.5,
+          "reference": 22
+        },
+        {
+          "id": "乙一",
+          "base": 440.0,
+          "reference": 20
+        },
+        {
+          "id": "丙一",
+          "base": 310.6,
+          "reference": 20
+        },
+        {
+          "id": "丙二",
+          "base": 310.0,
+          "reference": 20
+        },
+        {
+          "id": "丁一",
+          "base": 520.0,
+          "reference": 20
+        },
+        {
+          "id": "庚一",
+          "base": 660.0,
+          "reference": 20
+        },
+        {
+          "id": "辛一",
+          "base": 700.0,
+          "reference": 20
+        },
+        {
+          "id": "壬一",
+          "base": 780.0,
+          "reference": 20
+        }
+      ],
+      "links": [
+        {
+          "id": "联甲一",
+          "seat": "低音甲",
+          "entity": "甲一",
+          "start": 0,
+          "end": 100,
+          "credential": "维甲一"
+        },
+        {
+          "id": "联甲二",
+          "seat": "低音甲",
+          "entity": "甲二",
+          "start": 100,
+          "end": null,
+          "credential": "维甲二"
+        },
+        {
+          "id": "联乙一",
+          "seat": "高音乙",
+          "entity": "乙一",
+          "start": 0,
+          "end": null,
+          "credential": "维乙一"
+        },
+        {
+          "id": "联丙一",
+          "seat": "独管丙",
+          "entity": "丙一",
+          "start": 0,
+          "end": 150,
+          "credential": "维丙一"
+        },
+        {
+          "id": "联丙二",
+          "seat": "独管丙",
+          "entity": "丙二",
+          "start": 150,
+          "end": null,
+          "credential": "维丙二"
+        },
+        {
+          "id": "联丁一",
+          "seat": "背管丁",
+          "entity": "丁一",
+          "start": 0,
+          "end": null,
+          "credential": "维丁一"
+        },
+        {
+          "id": "联己迁",
+          "seat": "备管己",
+          "entity": "丙一",
+          "start": 150,
+          "end": null,
+          "credential": "维己迁"
+        },
+        {
+          "id": "联庚一",
+          "seat": "侧管庚",
+          "entity": "庚一",
+          "start": 0,
+          "end": 240,
+          "credential": "维庚一"
+        },
+        {
+          "id": "联辛一",
+          "seat": "副管辛",
+          "entity": "辛一",
+          "start": 0,
+          "end": null,
+          "credential": "维共享"
+        },
+        {
+          "id": "联壬一",
+          "seat": "边管壬",
+          "entity": "壬一",
+          "start": 0,
+          "end": null,
+          "credential": "维共享"
+        }
+      ]
+    }
+  }
+}

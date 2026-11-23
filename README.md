@@ -25,3 +25,13 @@ python3 -m pipeatlas.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m pipeatlas.check_flow takes` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+### 席位与实体对应
+
+「换管样例」`examples/handover-sample.json` 在 `review.registry` 中给出音管实体与带半开生效区间的席位对应记录。随后可按「按席位看换管」「按实体看迁移」「未对齐观测」切换：
+
+- 同名席位换了新管：`低音甲` 在生效起点换到实体 `甲二`，该秒的试录归 `甲二`。
+- 同一旧管换了席位但基线可追：实体 `丙一` 从 `独管丙` 迁到 `备管己`，按实体自身基准重新表达音分。
+- 一次未登记更换无法对齐：`侧管庚` 在缺登记时刻只列为未对齐，不猜成同一实体。
+
+运行 `python3 -m pipeatlas.check_flow migration` 可核对三种情形、拒绝重叠登记以及封存绑定不随后补登记改变。`examples/handover-reject.json` 为重叠登记，应返回 400。

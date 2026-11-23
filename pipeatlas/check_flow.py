@@ -36,9 +36,89 @@ def observe(rows, row_id, field, target):
         raise ValueError(f'{row_id}.{field} 为 {actual!r}，应为 {target!r}')
 
 
+def near(rows, row_id, field, target, tol=1e-6):
+    result = next((row for row in rows if row['id'] == row_id), None)
+    if result is None:
+        raise ValueError(f'{row_id} 不在结果中')
+    actual = result.get(field)
+    if not isinstance(actual, (int, float)) or abs(actual - target) > tol:
+        raise ValueError(f'{row_id}.{field} 为 {actual!r}，应为 {target!r}')
+
+
+def verify_handover(port, flow, data, original, alternate):
+    """Check same-seat replacement, same-entity migration and an unregistered swap."""
+    swap, migration, gaps = (original['outputs'][key] for key in ('swap', 'migration', 'unaligned'))
+    observe(swap, '低音甲', 'state', 'swapped')
+    observe(swap, '低音甲', 'entity', '甲二')
+    exchange = next(row for row in swap if row['id'] == '低音甲')['evidence']
+    if exchange['entities'] != ['甲一', '甲二']:
+        raise ValueError('同名席位换管的实体序列不完整')
+    boundary = next(item for item in exchange['observations'] if item['take'] == '甲换管当下')
+    if boundary['entity'] != '甲二' or boundary['link'] != '联甲二' or boundary['credential'] != '维甲二':
+        raise ValueError('同一秒换管没有以生效后的实体承接新试录')
+    if abs(boundary['raw']['deviation'] - (-17.72986385952954)) > 1e-6:
+        raise ValueError('换管当下的席位原始判定没有保留')
+
+    # 2. The old pipe moved to another seat and keeps its own history.  Its
+    #    observations align by entity and are re-expressed against the entity
+    #    reference, not by subtracting two seat-target deviations.
+    observe(swap, '备管己', 'entity', '丙一')
+    observe(migration, '丙一', 'state', 'moved')
+    migrated = next(row for row in migration if row['id'] == '丙一')
+    if migrated['evidence']['seats'] != ['独管丙', '备管己'] or migrated['evidence']['base'] != 310.6:
+        raise ValueError('旧管迁移没有按实体保留席位序列与自有基准')
+    near(migration, '丙一', 'delta', -7.785839234771144)
+    moved = next(item for item in migrated['evidence']['observations'] if item['take'] == '丙迁后')
+    if abs(moved['cents']) > 1e-9 or abs(moved['raw']['deviation'] - 14.552974566045034) > 1e-6:
+        raise ValueError('跨席位观测没有按实体基准重新表达音分')
+    # The naive subtraction of the two seat-relative deviations must not be the
+    # entity value: that would mix two different seat targets.
+    before = next(item for item in migrated['evidence']['observations'] if item['take'] == '基线')
+    naive = moved['raw']['deviation'] - before['raw']['deviation']
+    if abs(naive - migrated['delta']) < 1:
+        raise ValueError('跨席位偏差被直接相减')
+    if abs(moved['cents']) > 1e-9 or abs(before['cents'] - 7.785839234771144) > 1e-6:
+        raise ValueError('实体基准没有用事先选定的频率与温度')
+
+    # 3. An unregistered replacement cannot be aligned: neither the seat row
+    #    nor the entity row guesses an identity for it.
+    observe(swap, '侧管庚', 'state', 'unbound')
+    observe(swap, '侧管庚', 'entity', None)
+    observe(gaps, '庚未登记/侧管庚', 'state', 'unbound')
+    observe(gaps, '庚未登记/侧管庚', 'seat', '侧管庚')
+    observe(swap, '副管辛', 'state', 'conflict')
+    observe(gaps, '辛凭据冲突/副管辛', 'state', 'conflict')
+    observe(swap, '背管丁', 'state', 'untimed')
+    observe(swap, '背管丁', 'entity', None)
+    observe(gaps, '丁无时刻/背管丁', 'state', 'untimed')
+    observe(gaps, '基线/高音乙', 'state', 'untrusted')
+    if any(item['seat'] == '侧管庚' and item['at'] == 250
+           for row in migration for item in row['evidence']['observations']):
+        raise ValueError('未登记更换被猜成了同一实体')
+    observe(alternate['outputs']['swap'], '侧管庚', None, None)
+    observe(alternate['outputs']['migration'], '庚一', None, None)
+
+    # A sealed packet keeps the registry it was sealed with; later
+    # registrations only affect new checks.
+    sealed = request(port, 'seal', data)[0]
+    stored = request(port, f"packet/{sealed['digest']}")[0]
+    if stored != original:
+        raise ValueError('封存核对改变了已绑定维修记录')
+    later = json.loads(json.dumps(data))
+    later['review']['registry']['links'].append(
+        dict(id='联庚补登', seat='侧管庚', entity='庚一', start=240, end=None, credential='维庚补'))
+    fresh = request(port, 'evaluate', later)[0]['outputs']
+    observe(fresh['swap'], '侧管庚', 'state', 'unchanged')
+    if any(row['id'] == '庚未登记/侧管庚' for row in fresh['unaligned']):
+        raise ValueError('后补登记没有更正新的核对')
+    if stored['outputs'] != original['outputs']:
+        raise ValueError('后补登记改写了已封存的历史核对')
+
+
 def audit(port, flow):
-    review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
-    prefix = 'review-' if review else ''
+    handover = flow in ('swap', 'migration', 'unaligned')
+    review = not handover and any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
+    prefix = 'handover-' if handover else 'review-' if review else ''
     data = request(port, prefix+'sample')[0]
     alt = request(port, prefix+'alternate')[0]
     bad = json.loads((ROOT/'examples'/(prefix+'reject.json')).read_text(encoding='utf8'))
@@ -52,6 +132,9 @@ def audit(port, flow):
             if flow in baseline['outputs'] or any(enhanced['outputs'][k] != v for k,v in baseline['outputs'].items()):
                 raise ValueError('复核改变了基础口径')
     if flow in original['outputs']:
+        if handover:
+            verify_handover(port, flow, data, original, alternate)
+            return
         cases = json.loads((ROOT/'examples'/(prefix+'observations.json')).read_text(encoding='utf8'))
         row, key, value, alt_row, alt_key, alt_value = cases[flow]
         observe(original['outputs'][flow],row,key,value)

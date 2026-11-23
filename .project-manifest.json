@@ -86,6 +86,11 @@
       "id": "version_panel",
       "path": "web/version-panel.js",
       "responsibility": "封存选择、版本读取、比对和下载"
+    },
+    {
+      "id": "identity",
+      "path": "pipeatlas/identity.py",
+      "responsibility": "按生效区间解析席位与实体对应，并按实体重表达跨次观测"
     }
   ],
   "workflows": [
@@ -506,6 +511,81 @@
         "harmonics",
         "allocation"
       ]
+    },
+    {
+      "id": "swap",
+      "name": "按席位看换管",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.swap",
+      "steps": [
+        "同名席位在生效区间内换了物理音管，按席位保留每次试录的原始判定",
+        "同一秒换管以生效后的实体承接新试录"
+      ],
+      "success": "席位序列、实体与维修凭据契合固定观测",
+      "failure": "登记区间重叠或引用未知席位/实体时返回 400；缺时刻或缺登记不猜成同一实体",
+      "verification": "python3 -m pipeatlas.check_flow swap",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "identity",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "migration",
+      "name": "按实体看迁移",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.migration",
+      "steps": [
+        "旧管换席位后仍按实体保留自己的历史",
+        "用事先选定的实体基准频率与温度重新表达实测音分，不直接相减席位目标下的偏差"
+      ],
+      "success": "跨席位观测按实体基准重新表达，迁移差值契合固定观测",
+      "failure": "缺少可信基音或身份时不进入实体对齐；不伪造差值",
+      "verification": "python3 -m pipeatlas.check_flow migration",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "identity",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "unaligned",
+      "name": "未对齐观测",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.unaligned",
+      "steps": [
+        "历史缺身份、缺可信基音或维修登记有冲突时单独列出原因",
+        "已封存核对使用其绑定的维修记录，后补登记只影响新核对"
+      ],
+      "success": "未对齐原因与封存绑定契合固定观测",
+      "failure": "登记冲突返回 400；封存记录不随后补登记变化",
+      "verification": "python3 -m pipeatlas.check_flow unaligned",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "identity",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
     }
   ],
   "complexity": {
@@ -518,7 +598,8 @@
       "versioning_audit",
       "idempotency",
       "batch_transaction",
-      "snapshot_consistency"
+      "snapshot_consistency",
+      "effective_dated_identity"
     ]
   }
 }

@@ -70,11 +70,13 @@ async function choose(path) {
   const next = await request('evaluate', data);
   $('source').value = JSON.stringify(data, null, 2);
   show(next);
-  if (path === 'review-sample') {
+  if (path === 'review-sample' || path === 'handover-sample') {
     $('review-pane').open = true;
-    renderOperation(model.operations.find((op) => op.optional).id);
+    const stage = path === 'handover-sample' ? 'swap' : model.operations.find((op) => op.optional).id;
+    renderOperation(stage);
   }
-  note(({ sample:'样例已处理', alternate:'对照样例已处理', 'review-sample':'复核样例已处理' })[path]);
+  note(({ sample:'样例已处理', alternate:'对照样例已处理', 'review-sample':'复核样例已处理',
+    'handover-sample':'换管样例已处理' })[path] || '样例已处理');
 }
 
 function bind(id, action, event = 'click') {
@@ -93,6 +95,7 @@ guarded(async () => {
   }
   bind('sample', () => choose('sample'));
   bind('review-sample', () => choose('review-sample'));
+  bind('handover-sample', () => choose('handover-sample'));
   bind('alternate', () => choose('alternate'));
   bind('evaluate', async () => {
     show(await request('evaluate', source()));

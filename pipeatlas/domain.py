@@ -2,6 +2,12 @@ from math import sqrt
 from .contract import ident, invariant, num, obj, records
 
 
+def optional_instant(value, label='读数时刻'):
+    if value is None:
+        return None
+    return num(value, label, 0, 1e9)
+
+
 def parse(source):
     conditions = obj(source.get('conditions'), '温度读数')
     reference = num(conditions.get('reference'), '基准温度', 0, 40)
@@ -23,4 +29,6 @@ def parse(source):
     peaks = []
     for p in records(source.get('peaks'), '频峰', 360):
         peaks.append(dict(id=p['id'],hz=num(p.get('hz'),'频率',1,160000),amplitude=num(p.get('amplitude'),'幅值',0,100)))
-    return dict(pipes=pipes, opened=set(opened), peaks=peaks, reference=reference, ratio=ratio, floor=floor, tolerance=tolerance,passband=passband)
+    return dict(pipes=pipes, opened=set(opened), peaks=peaks, reference=reference, ratio=ratio,
+                floor=floor, tolerance=tolerance, passband=passband,
+                temperature=temperature, at=optional_instant(source.get('at')))
