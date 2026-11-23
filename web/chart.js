@@ -29,13 +29,24 @@ function render(svg, { outputs }) {
     const x = scale(0, top, 58, 668);
     const y = scale(0, high, 196, 40);
     grid(svg, 0, top, '赫兹');
+    const certified = (outputs.certificates ?? []).find((row) => row.id === '基线');
+    if (certified) {
+      for (const [lo, hi] of certified.effective) {
+        if (lo > top) continue;
+        rect(svg, x(lo), 30, x(Math.min(hi, top)) - x(lo), 166, 'band');
+      }
+      for (const part of certified.polluted) {
+        if (part.lo > top) continue;
+        rect(svg, x(part.lo), 30, x(Math.min(part.hi, top)) - x(part.lo), 166, 'band alert');
+      }
+    }
     for (const [i, p] of peaks.entries()) {
       const state = outputs.assign[i].state;
       const cls = state === 'assigned' ? 'series' : state === 'ambiguous' ? 'series alert' : 'series secondary';
       line(svg, x(p.hz), 196, x(p.hz), y(p.amplitude), cls);
     }
     for (const target of outputs.target.filter((p) => p.state === 'open' && p.hz <= top)) dot(svg, x(target.hz), 193, 'empty-mark', 4);
-    text(svg, 58, 24, '标记为目标基音位置');
+    text(svg, 58, 24, certified ? '阴影为有证且未污染频带，警示带为陷波或剪波' : '标记为目标基音位置');
 }
 
 export function draw(svg, packet, config) {

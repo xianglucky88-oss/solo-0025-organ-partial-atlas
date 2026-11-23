@@ -36,6 +36,98 @@ def observe(rows, row_id, field, target):
         raise ValueError(f'{row_id}.{field} 为 {actual!r}，应为 {target!r}')
 
 
+def audit_silence(port, data):
+    take = dict(id='暗管单开', temperature=20, opened=['暗管戊'], floor=0.2,
+                certificate=dict(floor=0.2, bands=[dict(lo=620, hi=660)]),
+                peaks=[dict(id='新基音', hz=640, amplitude=0.8)])
+    probe = dict(data, review=dict(data['review'], takes=[take]))
+    rows = request(port, 'evaluate', probe)[0]['outputs']['silence']
+    observe(rows, '暗管戊', 'state', 'covered')
+    row = next(item for item in rows if item['id'] == '暗管戊')
+    if row['evidence']['observed'] != ['暗管单开'] or row['evidence']['base'] != 'closed':
+        raise ValueError('基线与复测开管未分列')
+    # One certified absence must not be cancelled by another blind retest.
+    quiet = dict(id='背管静默', temperature=20, opened=['背管丁'], floor=0.2,
+                 certificate=dict(floor=0.2, bands=[dict(lo=500, hi=545)]), peaks=[])
+    side = dict(id='背管旁带', temperature=20, opened=['背管丁'], floor=0.2,
+                certificate=dict(floor=0.2, bands=[dict(lo=1000, hi=1100)]), peaks=[])
+    probe = dict(data, review=dict(data['review'], takes=[quiet, side]))
+    rows = request(port, 'evaluate', probe)[0]['outputs']['silence']
+    observe(rows, '背管丁', 'state', 'unseen')
+    row = next(item for item in rows if item['id'] == '背管丁')
+    if row['evidence']['unseen'] != ['背管静默'] or row['evidence']['blind'] != ['背管旁带']:
+        raise ValueError('有证未见与盲测未分列')
+    # A peak heard only in the other band cannot fill in the missing fundamental.
+    heard = dict(id='背管泛音', temperature=20, opened=['背管丁'], floor=0.2,
+                 certificate=dict(floor=0.2, bands=[dict(lo=1000, hi=1100)]),
+                 peaks=[dict(id='泛音', hz=1040, amplitude=0.8)])
+    probe = dict(data, review=dict(data['review'], takes=[quiet, heard]))
+    rows = request(port, 'evaluate', probe)[0]['outputs']['silence']
+    observe(rows, '背管丁', 'state', 'unseen')
+    # A legacy retest without a certificate replays under the old definitions and is not
+    # counted as certified evidence.
+    legacy = dict(id='背管旧档', temperature=20, opened=['背管丁'], peaks=[])
+    probe = dict(data, review=dict(data['review'], takes=[quiet, legacy]))
+    rows = request(port, 'evaluate', probe)[0]['outputs']['silence']
+    row = next(item for item in rows if item['id'] == '背管丁')
+    if row['evidence']['legacy'] != ['背管旧档'] or row['evidence']['certified'] != ['背管静默']:
+        raise ValueError('无证书旧档被计入有证')
+    # A chain that never covered the fundamental and a chain whose band sat on it but was
+    # notched are different failures and must not share one ledger kind.
+    notched = dict(id='背管陷波', temperature=20, opened=['背管丁'], floor=0.2,
+                   certificate=dict(floor=0.2, bands=[dict(lo=500, hi=545)],
+                                    polluted=[dict(lo=514, hi=525, kind='notch')]), peaks=[])
+    probe = dict(data, review=dict(data['review'], takes=[side, notched]))
+    rows = request(port, 'evaluate', probe)[0]['outputs']['silence']
+    row = next(item for item in rows if item['id'] == '背管丁')
+    if row['evidence']['blind'] != ['背管旁带'] or row['evidence']['muted'] != ['背管陷波']:
+        raise ValueError('仅盲测与有证被污染未分列')
+    if row['state'] != 'mixed':
+        raise ValueError('盲测与污染并存时被折成单一种失败')
+
+
+def audit_certificates(port, data):
+    # Same raw peaks, two different certificates. A second valid band that re-claims a
+    # notched stretch cannot whitewash the notch, and the notched pseudo-evidence cannot
+    # mark the pipe covered.
+    source = json.loads(json.dumps(data))
+    source['peaks'].append(dict(id='假基音', hz=520, amplitude=0.9))
+    notch = dict(lo=514, hi=525, kind='notch')
+    cert_a = dict(floor=0.2, bands=[dict(lo=500, hi=545)], polluted=[notch])
+    cert_b = dict(floor=0.2, bands=[dict(lo=500, hi=545), dict(lo=504, hi=530)], polluted=[notch])
+    for label, cert in (('单带', cert_a), ('重叠带', cert_b)):
+        outputs = request(port, 'evaluate', dict(source, certificate=cert))[0]['outputs']
+        row = next(item for item in outputs['certificates'] if item['id'] == '基线')
+        if row['gaps'] != [[514, 525]]:
+            raise ValueError(f'{label}掩盖了陷波缺口')
+        peak = next(item for item in outputs['candidate'] if item['id'] == '假基音')
+        if peak['count'] or peak['state'] != 'polluted':
+            raise ValueError(f'{label}的陷波区伪证参与了候选')
+        pipe = next(item for item in outputs['coverage'] if item['id'] == '背管丁')
+        if pipe['state'] == 'covered':
+            raise ValueError(f'{label}的陷波区伪证把音管标成已覆盖')
+    # With no certificate at all the same peak under the old definitions does assign.
+    legacy = next(item for item in request(port, 'evaluate', source)[0]['outputs']['coverage'] if item['id'] == '背管丁')
+    if legacy['state'] != 'covered':
+        raise ValueError('无证书旧档未按原口径回放')
+    # A peak that only the other band hears cannot fill the missing fundamental: one
+    # certified absence is not cancelled by another blind retest.
+    quiet = dict(id='静默链', temperature=20, opened=['背管丁'], floor=0.2,
+                 certificate=dict(floor=0.2, bands=[dict(lo=500, hi=545)]), peaks=[])
+    other = dict(id='旁带链', temperature=20, opened=['背管丁'], floor=0.2,
+                 certificate=dict(floor=0.2, bands=[dict(lo=1000, hi=1100)]),
+                 peaks=[dict(id='假基音', hz=520, amplitude=0.9)])
+    outputs = request(port, 'evaluate', dict(data, review=dict(data['review'], takes=[quiet, other])))[0]['outputs']
+    ledger = next(item for item in outputs['silence'] if item['id'] == '背管丁')
+    if ledger['state'] != 'unseen' or ledger['evidence']['unseen'] != ['静默链']:
+        raise ValueError('有证未见被盲测抵消')
+    # Certificates must match the amplitude scale of their own session.
+    take = dict(id='错门限', temperature=20, opened=['背管丁'], floor=0.5,
+                certificate=dict(floor=0.2, bands=[dict(lo=500, hi=545)]), peaks=[])
+    request(port, 'evaluate', dict(data, review=dict(data['review'], takes=[take])), status=400)
+    request(port, 'evaluate', dict(data, certificate=dict(floor=0.9, bands=[dict(lo=1, hi=2)])), status=400)
+
+
 def audit(port, flow):
     review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
     prefix = 'review-' if review else ''
@@ -57,12 +149,9 @@ def audit(port, flow):
         observe(original['outputs'][flow],row,key,value)
         observe(alternate['outputs'][flow],alt_row,alt_key,alt_value)
         if flow == 'silence':
-            take = dict(id='暗管单开', temperature=20, opened=['暗管戊'],
-                        peaks=[dict(id='新基音', hz=640, amplitude=0.8)])
-            probe = dict(data, review=dict(data['review'], takes=[take]))
-            rows = request(port, 'evaluate', probe)[0]['outputs'][flow]
-            observe(rows, '暗管戊', 'state', 'covered')
-            observe(rows, '暗管戊', 'evidence', dict(base='closed', observed=['暗管单开'], uncertain=[], absent=[]))
+            audit_silence(port, data)
+        if flow == 'certificates':
+            audit_certificates(port, data)
         return
     request(port,'seal',bad,status=400)
     left = request(port,'seal',data)[0]

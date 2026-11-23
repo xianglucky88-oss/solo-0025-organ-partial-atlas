@@ -78,6 +78,11 @@
       "responsibility": "独奏支持的槽位证据和基音复测稳定性"
     },
     {
+      "id": "certificate",
+      "path": "pipeatlas/certificate.py",
+      "responsibility": "频带证书解析、有证未污染区间与容差带缺口"
+    },
+    {
       "id": "result_table",
       "path": "web/result-table.js",
       "responsibility": "结果表及结构化证据明细"
@@ -505,6 +510,34 @@
         "result_table",
         "harmonics",
         "allocation"
+      ]
+    },
+    {
+      "id": "certificates",
+      "name": "频带证书",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.certificates",
+      "steps": [
+        "基线与各场复测各自提交与本场幅值标尺一致的频带证书，说明有证未污染、陷波或剪波污染及缺口",
+        "只有有证且未污染的峰参与当场候选与归属；其余保留为原始证据；相邻有效区间可连用，重叠污染不可被另一条证书盖过",
+        "开管未归基音时，整段容差带都有合格证书且无待判兼容峰才算有证未见；缺一截仍不算确认无峰",
+        "缺测账单列仅有盲测、有证未见与仍有争用；只在他场另一频带听到不能补足缺失的基音，无证书旧档按原口径回放且不计入有证次数"
+      ],
+      "success": "同一组原峰配两份不同证书时，陷波区伪证不把音管标成已覆盖，一次有证未见不被另一次盲测抵消",
+      "failure": "证书幅值门限与本场标尺不一致或污染类型非法时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow certificates",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "sessions",
+        "triage",
+        "certificate",
+        "harmonics",
+        "allocation",
+        "artifacts",
+        "result_table"
       ]
     }
   ],

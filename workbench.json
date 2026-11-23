@@ -173,6 +173,19 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "certificates",
+      "label": "频带证书",
+      "columns": [
+        "id",
+        "floor",
+        "bands",
+        "polluted",
+        "gaps",
+        "state"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -219,7 +232,17 @@
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
     "sequence": "序列未闭合",
-    "marked": "有标记"
+    "marked": "有标记",
+    "unseen": "有证未见",
+    "muted": "有证被污染",
+    "mixed": "盲测与污染并存",
+    "blind": "仅有盲测",
+    "partial": "仅旁带或待判",
+    "polluted": "陷波或剪波",
+    "unlicensed": "无证频段",
+    "uncertified": "无证书",
+    "certified": "有证书",
+    "legacy": "旧档回放"
   },
   "columns": {
     "amplitude": "幅值",
@@ -267,7 +290,20 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "仅有盲测",
+    "muted": "有证被污染",
+    "unseen": "有证未见",
+    "other": "他带仅见",
+    "uncertain": "待核对",
+    "legacy": "旧档回放",
+    "certified": "有证场次",
+    "detail": "逐场明细",
+    "claim": "认领频段",
+    "floor": "幅值门限",
+    "bands": "有证频段",
+    "polluted": "污染段",
+    "gaps": "证书缺口",
+    "effective": "有证且未污染"
   },
   "reconciliation": "clusters",
   "defaultOperation": "assign"

@@ -1,4 +1,5 @@
 from math import sqrt
+from . import certificate
 from .contract import ident, invariant, num, obj, records
 
 
@@ -23,4 +24,6 @@ def parse(source):
     peaks = []
     for p in records(source.get('peaks'), '频峰', 360):
         peaks.append(dict(id=p['id'],hz=num(p.get('hz'),'频率',1,160000),amplitude=num(p.get('amplitude'),'幅值',0,100)))
-    return dict(pipes=pipes, opened=set(opened), peaks=peaks, reference=reference, ratio=ratio, floor=floor, tolerance=tolerance,passband=passband)
+    cert = certificate.parse(source.get('certificate'), floor)
+    return dict(pipes=pipes, opened=set(opened), peaks=peaks, reference=reference, ratio=ratio, floor=floor,
+                tolerance=tolerance, passband=passband, certificate=cert)

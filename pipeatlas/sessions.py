@@ -1,5 +1,6 @@
 from math import sqrt
 
+from . import certificate
 from .contract import ident, invariant, num, records
 from .harmonics import evaluate
 from .rules import decide
@@ -17,8 +18,11 @@ def read_takes(review, model):
                       amplitude=num(r.get('amplitude'), '复测幅值', 0, 100))
                  for r in records(take.get('peaks'), '复测频峰', 100)]
         temperature = num(take.get('temperature'), '复测温度', 0, 40)
+        # A chain may set its own amplitude scale; its certificate must match that scale.
+        floor = num(take.get('floor', model['floor']), '复测幅值下限', 0, 100)
+        cert = certificate.parse(take.get('certificate'), floor, f'复测证书 {take["id"]}')
         # Divide by the original reference scale rather than freezing the first take's temperature.
-        configuration = dict(model, opened=set(keys), peaks=peaks,
+        configuration = dict(model, opened=set(keys), peaks=peaks, floor=floor, certificate=cert,
                              ratio=sqrt((temperature+273.15)/(model['reference']+273.15)))
         result.append((take['id'], configuration, decide(configuration, evaluate(configuration))))
     return result

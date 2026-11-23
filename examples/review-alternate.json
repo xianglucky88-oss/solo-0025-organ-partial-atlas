@@ -79,6 +79,16 @@
         "opened": [
           "独管丙"
         ],
+        "floor": 0.2,
+        "certificate": {
+          "floor": 0.2,
+          "bands": [
+            {
+              "lo": 300,
+              "hi": 330
+            }
+          ]
+        },
         "peaks": [
           {
             "id": "基音",

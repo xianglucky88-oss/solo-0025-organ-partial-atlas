@@ -50,9 +50,22 @@
   "silence": [
     "低音甲",
     "state",
-    "partial",
+    "mixed",
     "低音甲",
     "state",
     "blind"
+  ],
+  "certificates": [
+    "陷波复测",
+    "gaps",
+    [
+      [
+        216,
+        224
+      ]
+    ],
+    "独管复测",
+    "state",
+    "certified"
   ]
 }

@@ -25,3 +25,7 @@ python3 -m pipeatlas.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m pipeatlas.check_flow takes` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+### 频带证书
+
+基线与各场复测可各自附 `certificate`，用 `bands` 标明已证明至少能检出本场幅值门限峰的频段，用 `polluted` 标明该场被陷波（`notch`）或剪波（`clip`）污染的频段；证书的 `floor` 必须与本场幅值标尺一致。只有落在这两类扣除后的有证区间里的峰参与当场候选与归属，其余观测保留为原始证据。开管而未归到基音的管，只有整段基音音分容差带都有合格证书且没有待判兼容峰，才记“有证未见”；频带被认领但基音附近被陷波或剪波盖住则记“有证被污染”，不与从未覆盖该带的盲测混为一谈，两者各出一场时记“盲测与污染并存”。“频带证书”一行汇总每场的有证频段、污染段与缺口；运行 `python3 -m pipeatlas.check_flow certificates` 可核对重叠证书不能掩盖陷波、有证未见不被盲测抵消等口径。

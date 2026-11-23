@@ -85,6 +85,16 @@
         "opened": [
           "低音甲"
         ],
+        "floor": 0.2,
+        "certificate": {
+          "floor": 0.2,
+          "bands": [
+            {
+              "lo": 400,
+              "hi": 480
+            }
+          ]
+        },
         "peaks": [
           {
             "id": "二倍频",
@@ -99,11 +109,93 @@
         "opened": [
           "独管丙"
         ],
+        "floor": 0.2,
+        "certificate": {
+          "floor": 0.2,
+          "bands": [
+            {
+              "lo": 300,
+              "hi": 330
+            }
+          ]
+        },
         "peaks": [
           {
             "id": "基音",
             "hz": 312,
             "amplitude": 0.8
+          }
+        ]
+      },
+      {
+        "id": "背管静默",
+        "temperature": 20,
+        "opened": [
+          "背管丁"
+        ],
+        "floor": 0.2,
+        "certificate": {
+          "floor": 0.2,
+          "bands": [
+            {
+              "lo": 500,
+              "hi": 545
+            }
+          ]
+        },
+        "peaks": []
+      },
+      {
+        "id": "陷波复测",
+        "temperature": 20,
+        "opened": [
+          "低音甲"
+        ],
+        "floor": 0.2,
+        "certificate": {
+          "floor": 0.2,
+          "bands": [
+            {
+              "lo": 200,
+              "hi": 250
+            }
+          ],
+          "polluted": [
+            {
+              "lo": 216,
+              "hi": 224,
+              "kind": "notch"
+            }
+          ]
+        },
+        "peaks": []
+      },
+      {
+        "id": "高音争用",
+        "temperature": 20,
+        "opened": [
+          "高音乙"
+        ],
+        "floor": 0.2,
+        "certificate": {
+          "floor": 0.2,
+          "bands": [
+            {
+              "lo": 420,
+              "hi": 460
+            }
+          ]
+        },
+        "peaks": [
+          {
+            "id": "争甲",
+            "hz": 440,
+            "amplitude": 0.8
+          },
+          {
+            "id": "争乙",
+            "hz": 440.5,
+            "amplitude": 0.7
           }
         ]
       }

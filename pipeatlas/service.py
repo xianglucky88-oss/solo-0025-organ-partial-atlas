@@ -1,4 +1,4 @@
-from . import artifacts, domain, harmonics, reconcile, rules
+from . import artifacts, certificate, domain, harmonics, reconcile, rules
 from .review import analyze_review
 from .contract import ContractError, ident, obj
 
@@ -18,6 +18,9 @@ class Workbench:
         if 'review' in source:
             review = obj(source['review'], '复核数据')
             outputs.update(analyze_review(review, model, compiled, outputs))
+        elif model.get('certificate') is not None:
+            # A baseline may carry its own band certificate even without retests.
+            outputs['certificates'] = [certificate.row('基线', model['certificate'])]
         return artifacts.make_packet(self.config['namespace'], source, outputs)
 
     def execute(self, command, body):
