@@ -1,4 +1,5 @@
 from . import artifacts, domain, harmonics, reconcile, rules
+from .program import plan_work, recheck
 from .review import analyze_review
 from .contract import ContractError, ident, obj
 
@@ -18,6 +19,8 @@ class Workbench:
         if 'review' in source:
             review = obj(source['review'], '复核数据')
             outputs.update(analyze_review(review, model, compiled, outputs))
+        if 'plan' in source:
+            outputs.update(plan_work(source['plan'], model, outputs))
         return artifacts.make_packet(self.config['namespace'], source, outputs)
 
     def execute(self, command, body):
@@ -29,6 +32,8 @@ class Workbench:
             before = self.read(body.get('left'))
             after = self.read(body.get('right'))
             return artifacts.compare(before, after, self.config['operations'])
+        if command == 'recheck':
+            return recheck(self.read(body.get('plan')), body.get('take'))
         raise ContractError('没有这个处理入口', 404)
 
     def read(self, key):

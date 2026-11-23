@@ -1,0 +1,102 @@
+{
+  "id": "东廊音程",
+  "conditions": {
+    "reference": 20,
+    "temperature": 20,
+    "tolerance": 18,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "pipes": [
+    {
+      "id": "甲管",
+      "base": 220,
+      "maximum": 1
+    },
+    {
+      "id": "乙管",
+      "base": 330,
+      "maximum": 2
+    },
+    {
+      "id": "丙管",
+      "base": 440,
+      "maximum": 2
+    },
+    {
+      "id": "参考管",
+      "base": 550,
+      "maximum": 2
+    }
+  ],
+  "opened": [
+    "甲管",
+    "乙管",
+    "丙管",
+    "参考管"
+  ],
+  "peaks": [
+    {
+      "id": "峰一",
+      "hz": 220,
+      "amplitude": 0.9
+    },
+    {
+      "id": "峰二",
+      "hz": 330,
+      "amplitude": 0.8
+    },
+    {
+      "id": "峰三",
+      "hz": 440,
+      "amplitude": 0.8
+    }
+  ],
+  "plan": {
+    "intervals": [
+      {
+        "id": "甲乙音程",
+        "low": "甲管",
+        "high": "乙管",
+        "lo": 1,
+        "hi": 3
+      },
+      {
+        "id": "乙丙音程",
+        "low": "乙管",
+        "high": "丙管",
+        "lo": 1,
+        "hi": 3
+      },
+      {
+        "id": "甲参音程",
+        "low": "甲管",
+        "high": "参考管",
+        "lo": -2,
+        "hi": 2
+      }
+    ],
+    "actions": [
+      {
+        "id": "甲管",
+        "steps": [0],
+        "cost": 0
+      },
+      {
+        "id": "乙管",
+        "steps": [-2, 0, 2],
+        "cost": 1
+      },
+      {
+        "id": "丙管",
+        "steps": [0, 2],
+        "cost": 5
+      },
+      {
+        "id": "参考管",
+        "steps": [0],
+        "cost": 0
+      }
+    ]
+  }
+}

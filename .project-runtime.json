@@ -81,6 +81,22 @@
     {
       "workflow_id": "silence",
       "command": "python3 -m pipeatlas.check_flow silence"
+    },
+    {
+      "workflow_id": "program",
+      "command": "python3 -m pipeatlas.check_flow program"
+    },
+    {
+      "workflow_id": "intervals",
+      "command": "python3 -m pipeatlas.check_flow intervals"
+    },
+    {
+      "workflow_id": "actions",
+      "command": "python3 -m pipeatlas.check_flow actions"
+    },
+    {
+      "workflow_id": "recheck",
+      "command": "python3 -m pipeatlas.check_flow recheck"
     }
   ]
 }

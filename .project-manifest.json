@@ -78,6 +78,11 @@
       "responsibility": "独奏支持的槽位证据和基音复测稳定性"
     },
     {
+      "id": "program",
+      "path": "pipeatlas/program.py",
+      "responsibility": "音程作业计划、整数档位求解与封存计划复验"
+    },
+    {
       "id": "result_table",
       "path": "web/result-table.js",
       "responsibility": "结果表及结构化证据明细"
@@ -503,6 +508,96 @@
         "triage",
         "artifacts",
         "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "program",
+      "name": "作业计划",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.program",
+      "steps": [
+        "同一支管在这张计划里只有一个动作量，优先总代价最低、再比总绝对动作量、再按音管标识序比动作序列",
+        "逐边挑最便宜动作会自相矛盾但全局可行时仍排出完整方案；共用管联合无解时指出共同无法成立的音程组和被共用的管，不开部分作业单"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "作业计划输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow program",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "program",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "intervals",
+      "name": "音程约束",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.intervals",
+      "steps": [
+        "音程偏移为高端管温度归一基音偏差减低端管同口径偏差，计划两端各加自己的动作量",
+        "任一端没有可信基音时标明证据不足，不把缺值当零，也不改动已有频峰归属"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "音程引用名册外音管或区间下界高于上界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow intervals",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "program",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "actions",
+      "name": "音管动作",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.actions",
+      "steps": [
+        "各管只取登记的整数音分档位，固定管只允许零动作",
+        "非零动作按登记代价计费，零动作不计代价"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "档位不含零动作、非整数或重复档位时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow actions",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "program",
+        "artifacts",
+        "result_table"
+      ]
+    },
+    {
+      "id": "recheck",
+      "name": "计划复验",
+      "entry": "POST /pipeatlas/api/recheck",
+      "steps": [
+        "拿另一场有独立原峰的试录逐条核对封存计划要求，并核对参考管实测偏差相对基线是否超出登记允差",
+        "复验不用计划预测值替代读数，条件沿用所选封存计划而不是届时最新音程或允差"
+      ],
+      "success": "两端单管都在原允差内而约定音程越界时判不通过；读数回约且参考管未漂移时通过",
+      "failure": "封存版本不含计划返回 409；试录引用未知音管返回 400；版本不存在返回 404",
+      "verification": "python3 -m pipeatlas.check_flow recheck",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "program",
+        "archive",
+        "artifacts",
         "harmonics",
         "allocation"
       ]

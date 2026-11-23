@@ -37,20 +37,22 @@ def observe(rows, row_id, field, target):
 
 
 def audit(port, flow):
-    review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
-    prefix = 'review-' if review else ''
+    spec = next((op for op in CONFIG['operations'] if op['id'] == flow), None)
+    extension = spec.get('group', 'review') if spec and spec.get('optional') else None
+    prefix = f'{extension}-' if extension else ''
     data = request(port, prefix+'sample')[0]
     alt = request(port, prefix+'alternate')[0]
     bad = json.loads((ROOT/'examples'/(prefix+'reject.json')).read_text(encoding='utf8'))
     original = request(port,'evaluate',data)[0]
     alternate = request(port,'evaluate',alt)[0]
     request(port,'evaluate',bad,status=400)
-    if review:
+    if extension:
         request(port, 'seal', bad, status=400)
-        baselines = [request(port, 'evaluate', request(port, name)[0])[0] for name in ('sample', 'alternate')]
-        for baseline, enhanced in zip(baselines, (original, alternate), strict=True):
+        for enhanced, source in ((original, data), (alternate, alt)):
+            stripped = {key: value for key, value in source.items() if key != extension}
+            baseline = request(port, 'evaluate', stripped)[0]
             if flow in baseline['outputs'] or any(enhanced['outputs'][k] != v for k,v in baseline['outputs'].items()):
-                raise ValueError('复核改变了基础口径')
+                raise ValueError('扩展改变了基础口径')
     if flow in original['outputs']:
         cases = json.loads((ROOT/'examples'/(prefix+'observations.json')).read_text(encoding='utf8'))
         row, key, value, alt_row, alt_key, alt_value = cases[flow]
@@ -95,13 +97,69 @@ def audit(port, flow):
         if payload != original or 'attachment;' not in headers.get('Content-Disposition',''):
             raise ValueError('导出没有保留原版本或下载头')
         request(port,'export/' + '0'*64,status=404)
+    elif flow == 'recheck':
+        source = json.loads((ROOT/'examples'/'plan-recheck.json').read_text(encoding='utf8'))
+        digest = request(port, 'seal', source)[0]['digest']
+
+        def recheck(take, status=200, key=None):
+            return request(port, 'recheck', dict(plan=key or digest, take=take), status=status)[0]
+
+        def take(key, temperature, peaks, opened=('律管甲', '律管乙')):
+            return dict(id=key, temperature=temperature, opened=list(opened), peaks=peaks)
+
+        def peak(key, hz):
+            return dict(id=key, hz=hz, amplitude=0.8)
+
+        # 两端温度归一后单管都在原允差内，约定音程却越界
+        first = recheck(take('验收一', 24, [peak('甲峰', 222.1), peak('乙峰', 442.48)]))
+        observe(first['intervals'], '甲乙八度', 'state', 'violated')
+        observe(first['intervals'], '甲乙八度', 'offset', -6.7165748621012735)
+        observe(first['references'], '律管乙', 'state', 'held')
+        row = next(row for row in first['intervals'] if row['id'] == '甲乙八度')
+        if not all(abs(reading) <= 5 for reading in row['evidence']['readings'].values()):
+            raise ValueError('复验两端读数应都在原允差内')
+        if first['state'] != 'rejected':
+            raise ValueError('音程越界时复验应判不通过')
+        # 读数回到约定区间内，参考管未漂移
+        second = recheck(take('验收二', 20, [peak('甲峰', 220.2), peak('乙峰', 440.2)]))
+        observe(second['intervals'], '甲乙八度', 'state', 'held')
+        observe(second['references'], '律管乙', 'state', 'held')
+        if second['state'] != 'accepted':
+            raise ValueError('音程与参考管都合格时复验应通过')
+        # 参考管实测偏差相对基线超出登记允差
+        third = recheck(take('验收三', 20, [peak('甲峰', 220.4), peak('乙峰', 441.4)]))
+        observe(third['intervals'], '甲乙八度', 'state', 'held')
+        observe(third['references'], '律管乙', 'state', 'drift')
+        observe(third['references'], '律管乙', 'drift', 5.49972704111046)
+        if third['state'] != 'rejected':
+            raise ValueError('参考管漂移超差时复验应判不通过')
+        # 一端缺可信基音：证据不足，不把缺值当零
+        fourth = recheck(take('验收四', 20, [peak('乙峰', 440)]))
+        observe(fourth['intervals'], '甲乙八度', 'state', 'pending')
+        observe(fourth['intervals'], '甲乙八度', 'offset', None)
+        if fourth['state'] != 'pending':
+            raise ValueError('缺可信基音时复验应标证据不足')
+        # 复验条件沿用所选封存计划，而不是届时工作台里最新的音程或允差
+        loosened = json.loads(json.dumps(source))
+        loosened['plan']['intervals'][0]['lo'] = -10
+        loosened['plan']['intervals'][0]['hi'] = 10
+        loosened['conditions']['passband'] = 18
+        request(port, 'seal', loosened)
+        still = recheck(take('验收五', 24, [peak('甲峰', 222.1), peak('乙峰', 442.48)]))
+        observe(still['intervals'], '甲乙八度', 'state', 'violated')
+        drift = recheck(take('验收六', 20, [peak('甲峰', 220.4), peak('乙峰', 441.4)]))
+        observe(drift['references'], '律管乙', 'state', 'drift')
+        # 封存版本不含计划、试录引用未知音管、版本不存在
+        recheck(take('验收七', 20, [peak('甲峰', 220)]), status=409, key=left['digest'])
+        recheck(take('验收八', 20, [peak('甲峰', 220)], opened=('律管甲', '未知管')), status=400)
+        recheck(take('验收九', 20, [peak('甲峰', 220)]), status=404, key='0'*64)
     else:
         raise ValueError(f'未知工作流：{flow}')
 
 
 def main():
     parser = argparse.ArgumentParser(description='运行有界的生产工作流检查')
-    parser.add_argument('flow', choices=[op['id'] for op in CONFIG['operations']]+['seal','compare','export'])
+    parser.add_argument('flow', choices=[op['id'] for op in CONFIG['operations']]+['seal','compare','export','recheck'])
     args = parser.parse_args()
     with TemporaryDirectory(prefix=CONFIG['namespace']+'-') as directory:
         with serve(Path(directory)/'observations.sqlite', 0) as server:

@@ -1,0 +1,61 @@
+{
+  "id": "西廊验收",
+  "conditions": {
+    "reference": 20,
+    "temperature": 20,
+    "tolerance": 18,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "pipes": [
+    {
+      "id": "律管甲",
+      "base": 220,
+      "maximum": 1
+    },
+    {
+      "id": "律管乙",
+      "base": 440,
+      "maximum": 2
+    }
+  ],
+  "opened": [
+    "律管甲",
+    "律管乙"
+  ],
+  "peaks": [
+    {
+      "id": "基甲",
+      "hz": 220,
+      "amplitude": 0.9
+    },
+    {
+      "id": "基乙",
+      "hz": 440,
+      "amplitude": 0.8
+    }
+  ],
+  "plan": {
+    "intervals": [
+      {
+        "id": "甲乙八度",
+        "low": "律管甲",
+        "high": "律管乙",
+        "lo": -3,
+        "hi": 3
+      }
+    ],
+    "actions": [
+      {
+        "id": "律管甲",
+        "steps": [-4, 0, 4],
+        "cost": 2
+      },
+      {
+        "id": "律管乙",
+        "steps": [0],
+        "cost": 0
+      }
+    ]
+  }
+}

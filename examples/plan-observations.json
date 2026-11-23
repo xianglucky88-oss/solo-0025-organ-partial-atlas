@@ -1,0 +1,26 @@
+{
+  "program": [
+    "作业计划",
+    "state",
+    "planned",
+    "作业计划",
+    "state",
+    "blocked"
+  ],
+  "intervals": [
+    "甲乙音程",
+    "predicted",
+    2,
+    "乙丙音程",
+    "state",
+    "blocked"
+  ],
+  "actions": [
+    "甲管",
+    "action",
+    -2,
+    "乙管",
+    "action",
+    null
+  ]
+}

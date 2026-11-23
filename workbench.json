@@ -173,6 +173,46 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "program",
+      "label": "作业计划",
+      "columns": [
+        "id",
+        "state",
+        "cost",
+        "moves",
+        "count",
+        "evidence"
+      ],
+      "optional": true,
+      "group": "plan"
+    },
+    {
+      "id": "intervals",
+      "label": "音程约束",
+      "columns": [
+        "id",
+        "offset",
+        "predicted",
+        "state",
+        "evidence"
+      ],
+      "optional": true,
+      "group": "plan"
+    },
+    {
+      "id": "actions",
+      "label": "音管动作",
+      "columns": [
+        "id",
+        "action",
+        "cost",
+        "state",
+        "evidence"
+      ],
+      "optional": true,
+      "group": "plan"
     }
   ],
   "values": {
@@ -219,7 +259,15 @@
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
     "sequence": "序列未闭合",
-    "marked": "有标记"
+    "marked": "有标记",
+    "planned": "已排定",
+    "withheld": "暂缓排定",
+    "blocked": "共同无解",
+    "held": "约定成立",
+    "violated": "越出约定",
+    "fixed": "固定参考",
+    "accepted": "验收通过",
+    "rejected": "验收不通过"
   },
   "columns": {
     "amplitude": "幅值",
@@ -267,7 +315,26 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "cost": "动作代价",
+    "moves": "动作总量",
+    "action": "动作音分",
+    "offset": "音程偏移",
+    "predicted": "预计偏移",
+    "steps": "登记档位",
+    "price": "非零代价",
+    "drift": "参考漂移",
+    "low": "低端音管",
+    "high": "高端音管",
+    "lo": "差值下界",
+    "hi": "差值上界",
+    "missing": "缺证音管",
+    "readings": "复验读数",
+    "baseline": "基线偏差",
+    "tolerance": "登记允差",
+    "intervals": "相关音程",
+    "pipes": "相关音管",
+    "moved": "动作音管"
   },
   "reconciliation": "clusters",
   "defaultOperation": "assign"

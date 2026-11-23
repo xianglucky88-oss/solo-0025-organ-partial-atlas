@@ -11,7 +11,7 @@
   <header class="top">
     <div><p class="eyebrow">管风琴调律</p><h1>音管泛音归属台</h1></div>
     <div class="toolbar" aria-label="数据操作">
-      <button id="sample">样例</button><button id="alternate">对照样例</button><button id="review-sample">复核样例</button>
+      <button id="sample">样例</button><button id="alternate">对照样例</button><button id="review-sample">复核样例</button><button id="plan-sample">作业样例</button>
       <label class="upload-label">导入数据<input id="upload" type="file" accept=".json,application/json" aria-label="导入数据"></label>
       <button id="evaluate">重新处理</button><button id="seal" class="primary">封存成果</button>
     </div>
@@ -28,6 +28,10 @@
         <summary>扩展复核</summary>
         <nav id="review-stages" class="stage-list" aria-label="扩展复核阶段"></nav>
       </details>
+      <details id="plan-pane" class="review-pane" hidden>
+        <summary>音程作业</summary>
+        <nav id="plan-stages" class="stage-list" aria-label="音程作业阶段"></nav>
+      </details>
       <section class="result-shell" aria-label="结果明细">
         <div class="results-title"><h2 id="table-title">独占归属</h2><span id="row-count"></span></div>
         <p id="empty" hidden>当前没有明细</p>
@@ -42,6 +46,7 @@
         <button id="inspect">打开目标版本</button><button id="compare">查看差异</button><a class="export-link" id="export" hidden>下载交接资料</a>
       </div>
     </section>
+    <details id="recheck-pane" class="input-pane"><summary>音程复验</summary><p>对「目标版本」选中的封存计划，提交一场有独立原峰的试录逐条核对。</p><textarea id="recheck-take" spellcheck="false" aria-label="复验试录数据"></textarea><button id="recheck" class="primary">复验封存计划</button></details>
     <details id="source-pane" class="input-pane"><summary>来源数据</summary><textarea id="source" spellcheck="false" aria-label="观测来源数据"></textarea></details>
   </main>
   <dialog id="detail" aria-labelledby="detail-title"><form method="dialog"><h2 id="detail-title"></h2><button>关闭</button></form><div id="detail-content"></div></dialog>

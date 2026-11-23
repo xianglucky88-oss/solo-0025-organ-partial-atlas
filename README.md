@@ -18,6 +18,8 @@ python3 -m pipeatlas.server
 python3 -m pipeatlas.check_flow target
 python3 -m pipeatlas.check_flow clusters
 python3 -m pipeatlas.check_flow export
+python3 -m pipeatlas.check_flow program
+python3 -m pipeatlas.check_flow recheck
 ```
 
 这些命令在临时成果库和临时回环端口运行实际 HTTP 接口，分别核对样例、对照和拒绝路径。`examples` 保存业务示例及可人工核算的观测点。完整命令见 `.project-runtime.json`；自动化测试套件留置，不包含私有验收测试、缺陷任务或参考解答。
@@ -25,3 +27,7 @@ python3 -m pipeatlas.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m pipeatlas.check_flow takes` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+### 音程作业
+
+使用「作业样例」，随后在「音程作业」切换各项结果。有效输入见 `examples/plan-sample.json` 与 `examples/plan-alternate.json`。`python3 -m pipeatlas.check_flow program` 核对逐边挑最便宜动作会自相矛盾、但还有全局可行方案的排产；`python3 -m pipeatlas.check_flow recheck` 核对封存计划的复验，包括两端单管都在原允差内、约定音程却越界的验收结论。封存一份含 `plan` 的成果后，在「音程复验」对目标版本提交一场新试录即可逐条核对。
