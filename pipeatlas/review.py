@@ -1,4 +1,5 @@
 from .contract import num
+from .deformation import analyze_deformation
 from .sessions import read_takes, take_scope
 from .take_evidence import isolated_support, stability
 from .triage import harmonic_residuals, silent_openings, slot_pressure, tune_handoff
@@ -9,6 +10,9 @@ def analyze_review(review, model, facts, outputs):
     limit = num(review.get('stability_limit', 5), '复测音分一致限值', 0, 100)
     stable = stability(takes, outputs, limit)
     isolated = isolated_support(takes, outputs)
-    return dict(takes=take_scope(takes), isolated=isolated, stability=stable,
-                pressure=slot_pressure(facts, outputs), harmonics=harmonic_residuals(outputs),
-                handoff=tune_handoff(outputs, stable, isolated), silence=silent_openings(takes, outputs, model['pipes']))
+    result = dict(takes=take_scope(takes), isolated=isolated, stability=stable,
+                  pressure=slot_pressure(facts, outputs), harmonics=harmonic_residuals(outputs),
+                  handoff=tune_handoff(outputs, stable, isolated), silence=silent_openings(takes, outputs, model['pipes']))
+    if 'deformation' in review:
+        result['deformation'] = analyze_deformation(review, model, takes, outputs)
+    return result

@@ -59,10 +59,29 @@ def audit(port, flow):
         if flow == 'silence':
             take = dict(id='暗管单开', temperature=20, opened=['暗管戊'],
                         peaks=[dict(id='新基音', hz=640, amplitude=0.8)])
-            probe = dict(data, review=dict(data['review'], takes=[take]))
+            review = dict(data['review'])
+            review['takes'] = [take]
+            review.pop('deformation', None)
+            probe = dict(data, review=review)
             rows = request(port, 'evaluate', probe)[0]['outputs'][flow]
             observe(rows, '暗管戊', 'state', 'covered')
             observe(rows, '暗管戊', 'evidence', dict(base='closed', observed=['暗管单开'], uncertain=[], absent=[]))
+        if flow == 'deformation':
+            sample_rows = original['outputs'][flow]
+            if next(r for r in sample_rows if r['id'] == '独奏己')['state'] != 'ready':
+                raise ValueError('仅整体音分偏移且形变在允差内时，应沿用原有基音调律判定')
+            if any(row['state'] == 'persistent' and not all(
+                    band in ('above', 'below') for band in row['evidence']['bands'].values())
+                   for row in sample_rows):
+                raise ValueError('持续形变必须两场有证范围同在限值一侧超限')
+            for case in (
+                dict(data['review'], deformation=[dict(data['review']['deformation'][0], takes=['暗管独奏甲', '暗管独奏甲'])]),
+                dict(data['review'], deformation=[dict(data['review']['deformation'][0],
+                                                       orders=[dict(harmonic=1, coefficient=1, limit=2),
+                                                               dict(harmonic=2, coefficient=1, limit=2),
+                                                               dict(harmonic=3, coefficient=2, limit=2)])]),
+            ):
+                request(port, 'evaluate', dict(data, review=case), status=400)
         return
     request(port,'seal',bad,status=400)
     left = request(port,'seal',data)[0]

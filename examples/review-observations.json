@@ -54,5 +54,13 @@
     "低音甲",
     "state",
     "blind"
+  ],
+  "deformation": [
+    "暗管戊",
+    "state",
+    "persistent",
+    "暗管戊",
+    "state",
+    "revisit"
   ]
 }

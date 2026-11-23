@@ -81,6 +81,10 @@
     {
       "workflow_id": "silence",
       "command": "python3 -m pipeatlas.check_flow silence"
+    },
+    {
+      "workflow_id": "deformation",
+      "command": "python3 -m pipeatlas.check_flow deformation"
     }
   ]
 }

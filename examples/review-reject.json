@@ -32,13 +32,19 @@
       "id": "暗管戊",
       "base": 640,
       "maximum": 3
+    },
+    {
+      "id": "独奏己",
+      "base": 256,
+      "maximum": 3
     }
   ],
   "opened": [
     "低音甲",
     "高音乙",
     "独管丙",
-    "背管丁"
+    "背管丁",
+    "独奏己"
   ],
   "peaks": [
     {
@@ -75,6 +81,11 @@
       "id": "旁峰",
       "hz": 167,
       "amplitude": 0.4
+    },
+    {
+      "id": "己基音",
+      "hz": 256,
+      "amplitude": 0.7
     }
   ],
   "review": {
@@ -83,13 +94,69 @@
         "id": "低音隔离",
         "temperature": 20,
         "opened": [
-          "未知音管"
+          "低音甲"
         ],
         "peaks": [
           {
             "id": "二倍频",
             "hz": 440,
             "amplitude": 0.8
+          }
+        ]
+      },
+      {
+        "id": "独奏己甲",
+        "temperature": 20,
+        "opened": [
+          "独奏己"
+        ],
+        "peaks": [
+          {
+            "id": "复用峰",
+            "hz": 256,
+            "amplitude": 0.8
+          }
+        ]
+      },
+      {
+        "id": "独奏己乙",
+        "temperature": 20,
+        "opened": [
+          "独奏己"
+        ],
+        "peaks": [
+          {
+            "id": "复用峰",
+            "hz": 256,
+            "amplitude": 0.8
+          }
+        ]
+      }
+    ],
+    "stability_limit": 5,
+    "deformation": [
+      {
+        "pipe": "独奏己",
+        "takes": [
+          "独奏己甲",
+          "独奏己乙"
+        ],
+        "limit": 8,
+        "orders": [
+          {
+            "harmonic": 1,
+            "coefficient": 0,
+            "limit": 2
+          },
+          {
+            "harmonic": 2,
+            "coefficient": 1,
+            "limit": 2
+          },
+          {
+            "harmonic": 3,
+            "coefficient": 2,
+            "limit": 2
           }
         ]
       }

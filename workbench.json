@@ -173,6 +173,18 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "deformation",
+      "label": "形变交接",
+      "columns": [
+        "id",
+        "state",
+        "limit",
+        "takes",
+        "evidence"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -219,7 +231,15 @@
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
     "sequence": "序列未闭合",
-    "marked": "有标记"
+    "marked": "有标记",
+    "feasible": "有共同解释",
+    "mismatch": "谱形不符",
+    "inconclusive": "证据不足",
+    "persistent": "持续形变",
+    "above": "正向超限",
+    "below": "负向超限",
+    "within": "形变在允差内",
+    "crossing": "范围跨越限值"
   },
   "columns": {
     "amplitude": "幅值",
@@ -267,7 +287,17 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "limit": "形变允差",
+    "range": "形变量有证范围",
+    "band": "限值带",
+    "coefficient": "形变系数",
+    "x_band": "该阶推出的形变量范围",
+    "peak": "来源频峰",
+    "ranges": "各场有证范围",
+    "bands": "各场限值带",
+    "baseline": "原有基音判定",
+    "reason": "不下结论原因"
   },
   "reconciliation": "clusters",
   "defaultOperation": "assign"

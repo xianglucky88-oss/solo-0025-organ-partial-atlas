@@ -78,6 +78,11 @@
       "responsibility": "独奏支持的槽位证据和基音复测稳定性"
     },
     {
+      "id": "deformation",
+      "path": "pipeatlas/deformation.py",
+      "responsibility": "台架形变登记核验与两场独奏的共同形变量区间交接"
+    },
+    {
       "id": "result_table",
       "path": "web/result-table.js",
       "responsibility": "结果表及结构化证据明细"
@@ -501,6 +506,30 @@
         "rules",
         "review",
         "triage",
+        "artifacts",
+        "result_table",
+        "harmonics",
+        "allocation"
+      ]
+    },
+    {
+      "id": "deformation",
+      "name": "形变交接",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.deformation",
+      "steps": [
+        "按台架登记的各阶系数与误差限，用两场预先指定、原峰互不复用的单管独奏求同一个整体偏移加同一个形变量的共同可行区间",
+        "两场有证范围同在形变允差一侧超限列为持续形变；一场超限或范围跨越限值留待复测；仅整体偏移且形变在允差内沿用基音调律判定；证据齐全却无共同解释标记谱形不符"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "形变登记非法（未知独奏、非单管、原峰复用、基音系数非零、高阶系数不足两个不同值等）时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow deformation",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "deformation",
         "artifacts",
         "result_table",
         "harmonics",

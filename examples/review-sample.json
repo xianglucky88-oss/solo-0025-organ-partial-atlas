@@ -32,13 +32,19 @@
       "id": "暗管戊",
       "base": 640,
       "maximum": 3
+    },
+    {
+      "id": "独奏己",
+      "base": 256,
+      "maximum": 3
     }
   ],
   "opened": [
     "低音甲",
     "高音乙",
     "独管丙",
-    "背管丁"
+    "背管丁",
+    "独奏己"
   ],
   "peaks": [
     {
@@ -75,6 +81,11 @@
       "id": "旁峰",
       "hz": 167,
       "amplitude": 0.4
+    },
+    {
+      "id": "己基音",
+      "hz": 256,
+      "amplitude": 0.7
     }
   ],
   "review": {
@@ -106,8 +117,156 @@
             "amplitude": 0.8
           }
         ]
+      },
+      {
+        "id": "暗管独奏甲",
+        "temperature": 20,
+        "opened": [
+          "暗管戊"
+        ],
+        "peaks": [
+          {
+            "id": "暗甲一",
+            "hz": 640.739784,
+            "amplitude": 0.8
+          },
+          {
+            "id": "暗甲二",
+            "hz": 1286.671539,
+            "amplitude": 0.7
+          },
+          {
+            "id": "暗甲三",
+            "hz": 1937.826818,
+            "amplitude": 0.7
+          }
+        ]
+      },
+      {
+        "id": "暗管独奏乙",
+        "temperature": 20,
+        "opened": [
+          "暗管戊"
+        ],
+        "peaks": [
+          {
+            "id": "暗乙一",
+            "hz": 639.26107,
+            "amplitude": 0.8
+          },
+          {
+            "id": "暗乙二",
+            "hz": 1284.443838,
+            "amplitude": 0.7
+          },
+          {
+            "id": "暗乙三",
+            "hz": 1935.589446,
+            "amplitude": 0.7
+          }
+        ]
+      },
+      {
+        "id": "独奏己甲",
+        "temperature": 20,
+        "opened": [
+          "独奏己"
+        ],
+        "peaks": [
+          {
+            "id": "己甲一",
+            "hz": 256.592169,
+            "amplitude": 0.8
+          },
+          {
+            "id": "己甲二",
+            "hz": 513.184339,
+            "amplitude": 0.7
+          },
+          {
+            "id": "己甲三",
+            "hz": 769.776508,
+            "amplitude": 0.7
+          }
+        ]
+      },
+      {
+        "id": "独奏己乙",
+        "temperature": 20,
+        "opened": [
+          "独奏己"
+        ],
+        "peaks": [
+          {
+            "id": "己乙一",
+            "hz": 255.55677,
+            "amplitude": 0.8
+          },
+          {
+            "id": "己乙二",
+            "hz": 511.11354,
+            "amplitude": 0.7
+          },
+          {
+            "id": "己乙三",
+            "hz": 766.67031,
+            "amplitude": 0.7
+          }
+        ]
       }
     ],
-    "stability_limit": 5
+    "stability_limit": 5,
+    "deformation": [
+      {
+        "pipe": "暗管戊",
+        "takes": [
+          "暗管独奏甲",
+          "暗管独奏乙"
+        ],
+        "limit": 6,
+        "orders": [
+          {
+            "harmonic": 1,
+            "coefficient": 0,
+            "limit": 1
+          },
+          {
+            "harmonic": 2,
+            "coefficient": 1,
+            "limit": 1
+          },
+          {
+            "harmonic": 3,
+            "coefficient": 2,
+            "limit": 1
+          }
+        ]
+      },
+      {
+        "pipe": "独奏己",
+        "takes": [
+          "独奏己甲",
+          "独奏己乙"
+        ],
+        "limit": 8,
+        "orders": [
+          {
+            "harmonic": 1,
+            "coefficient": 0,
+            "limit": 2
+          },
+          {
+            "harmonic": 2,
+            "coefficient": 1,
+            "limit": 2
+          },
+          {
+            "harmonic": 3,
+            "coefficient": 2,
+            "limit": 2
+          }
+        ]
+      }
+    ]
   }
 }
