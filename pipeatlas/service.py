@@ -1,4 +1,5 @@
 from . import artifacts, domain, harmonics, reconcile, rules
+from .rehearsal import analyze_rehearsal
 from .review import analyze_review
 from .contract import ContractError, ident, obj
 
@@ -18,6 +19,8 @@ class Workbench:
         if 'review' in source:
             review = obj(source['review'], '复核数据')
             outputs.update(analyze_review(review, model, compiled, outputs))
+        if 'rehearsal' in source:
+            outputs.update(analyze_rehearsal(source['rehearsal'], source['opened']))
         return artifacts.make_packet(self.config['namespace'], source, outputs)
 
     def execute(self, command, body):

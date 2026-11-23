@@ -81,6 +81,14 @@
     {
       "workflow_id": "silence",
       "command": "python3 -m pipeatlas.check_flow silence"
+    },
+    {
+      "workflow_id": "rehearsal",
+      "command": "python3 -m pipeatlas.check_flow rehearsal"
+    },
+    {
+      "workflow_id": "rehearsal_evidence",
+      "command": "python3 -m pipeatlas.check_flow rehearsal_evidence"
     }
   ]
 }

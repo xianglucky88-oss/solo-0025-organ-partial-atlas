@@ -38,7 +38,12 @@ def observe(rows, row_id, field, target):
 
 def audit(port, flow):
     review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
-    prefix = 'review-' if review else ''
+    if flow in ('rehearsal', 'rehearsal_evidence'):
+        prefix = 'rehearsal-'
+    elif review:
+        prefix = 'review-'
+    else:
+        prefix = ''
     data = request(port, prefix+'sample')[0]
     alt = request(port, prefix+'alternate')[0]
     bad = json.loads((ROOT/'examples'/(prefix+'reject.json')).read_text(encoding='utf8'))
@@ -47,8 +52,13 @@ def audit(port, flow):
     request(port,'evaluate',bad,status=400)
     if review:
         request(port, 'seal', bad, status=400)
-        baselines = [request(port, 'evaluate', request(port, name)[0])[0] for name in ('sample', 'alternate')]
+        baselines = [request(port, 'evaluate', request(port, name)[0])[0]
+                     for name in ('sample', 'alternate')]
         for baseline, enhanced in zip(baselines, (original, alternate), strict=True):
+            if flow in ('rehearsal', 'rehearsal_evidence'):
+                if any(key in baseline['outputs'] for key in ('rehearsal', 'rehearsal_evidence')):
+                    raise ValueError('试录结果不应出现在基础包')
+                continue
             if flow in baseline['outputs'] or any(enhanced['outputs'][k] != v for k,v in baseline['outputs'].items()):
                 raise ValueError('复核改变了基础口径')
     if flow in original['outputs']:
@@ -56,6 +66,18 @@ def audit(port, flow):
         row, key, value, alt_row, alt_key, alt_value = cases[flow]
         observe(original['outputs'][flow],row,key,value)
         observe(alternate['outputs'][flow],alt_row,alt_key,alt_value)
+        if flow == 'rehearsal':
+            # 有证通过：共同支持达标、覆盖达标，且两个指标同时给出。
+            passed = next(r for r in original['outputs']['rehearsal'] if r['id'] == '高频带')
+            observe([passed], '高频带', 'state', 'verified')
+            if passed['energy_ratio'] is None or passed['coverage'] is None:
+                raise ValueError('合格频带必须同时给出覆盖比例与净能量比')
+            # 两席各自有效时长充足但共同支持不足，不得发成合格。
+            short = next(r for r in alternate['outputs']['rehearsal'] if r['id'] == '中频带')
+            observe([short], '中频带', 'state', 'short')
+            # 长时弱声被一小段强音托高整段比值：证据段仍记录超限，频带不得合格。
+            over = next(r for r in original['outputs']['rehearsal'] if r['id'] == '低频带')
+            observe([over], '低频带', 'state', 'over')
         if flow == 'silence':
             take = dict(id='暗管单开', temperature=20, opened=['暗管戊'],
                         peaks=[dict(id='新基音', hz=640, amplitude=0.8)])

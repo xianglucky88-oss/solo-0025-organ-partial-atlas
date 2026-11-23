@@ -25,3 +25,14 @@ python3 -m pipeatlas.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m pipeatlas.check_flow takes` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+### 试录分频带比对
+
+使用「试录样例」，在「扩展复核」查看「试录分频带比对」与「试录证据段」。有效输入见 `examples/rehearsal-sample.json` 与 `examples/rehearsal-alternate.json`：
+
+```sh
+python3 -m pipeatlas.check_flow rehearsal
+python3 -m pipeatlas.check_flow rehearsal_evidence
+```
+
+近席与远席按共同有证半开时间段对齐，线性功率先换算再扣背景；覆盖比例与净能量总和之比在同一共同支持范围上分别给出，超限、覆盖不足与有证通过分别说明。

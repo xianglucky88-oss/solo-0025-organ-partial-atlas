@@ -173,6 +173,37 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "rehearsal",
+      "label": "试录分频带比对",
+      "columns": [
+        "id",
+        "support",
+        "qualified",
+        "coverage",
+        "energy_ratio",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "rehearsal_evidence",
+      "label": "试录证据段",
+      "columns": [
+        "id",
+        "band",
+        "start",
+        "end",
+        "duration",
+        "near_net",
+        "far_net",
+        "ratio",
+        "state",
+        "evidence"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -219,7 +250,13 @@
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
     "sequence": "序列未闭合",
-    "marked": "有标记"
+    "marked": "有标记",
+    "verified": "有证通过",
+    "over": "已证超限",
+    "short": "覆盖不足",
+    "rated": "可比段",
+    "unrated": "低于背景",
+    "undefined": "比值无定义"
   },
   "columns": {
     "amplitude": "幅值",
@@ -267,7 +304,22 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "band": "频带",
+    "start": "起点（秒）",
+    "end": "止点（秒）",
+    "duration": "段时长（秒）",
+    "support": "共同支持时长（秒）",
+    "qualified": "合格时长（秒）",
+    "coverage": "合格覆盖比例",
+    "energy_ratio": "净能量远近比",
+    "near_net": "近席净功率",
+    "far_net": "远席净功率",
+    "ratio": "远近功率比",
+    "ratio_low": "合格比值下界",
+    "ratio_high": "合格比值上界",
+    "min_support": "最短支持时长",
+    "min_coverage": "最短覆盖比例"
   },
   "reconciliation": "clusters",
   "defaultOperation": "assign"

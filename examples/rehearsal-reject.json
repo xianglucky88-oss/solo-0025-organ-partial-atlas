@@ -1,0 +1,49 @@
+{
+  "id": "北廊风箱",
+  "conditions": {
+    "reference": 20,
+    "temperature": 20,
+    "tolerance": 18,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "pipes": [
+    { "id": "低音甲", "base": 220, "maximum": 4 },
+    { "id": "高音乙", "base": 440, "maximum": 3 },
+    { "id": "独管丙", "base": 310, "maximum": 3 },
+    { "id": "背管丁", "base": 520, "maximum": 2 },
+    { "id": "暗管戊", "base": 640, "maximum": 3 }
+  ],
+  "opened": ["低音甲", "高音乙", "独管丙", "背管丁"],
+  "peaks": [
+    { "id": "峰甲", "hz": 220, "amplitude": 0.9 },
+    { "id": "峰乙", "hz": 440, "amplitude": 0.8 }
+  ],
+  "rehearsal": {
+    "id": "试录坏包",
+    "bands": [
+      { "id": "低频带", "low": 100, "high": 300 }
+    ],
+    "criteria": {
+      "bands": ["低频带"],
+      "ratio_low": 0.5,
+      "ratio_high": 1.5,
+      "min_coverage": 0.8,
+      "min_support": 1.0
+    },
+    "takes": {
+      "near": {
+        "opened": ["低音甲", "高音乙", "独管丙", "背管丁"],
+        "measurements": [
+          { "id": "近低", "band": "低频带", "start": 0, "end": 2, "band_low": 100, "band_high": 300, "power": 110, "factor": 1, "background": 10, "mark": "valid" }
+        ]
+      },
+      "far": {
+        "opened": ["高音乙", "独管丙", "背管丁"],
+        "measurements": [
+          { "id": "远低", "band": "低频带", "start": 0, "end": 2, "band_low": 100, "band_high": 300, "power": 100, "factor": 1, "background": 10, "mark": "valid" }
+        ]
+      }
+    }
+  }
+}

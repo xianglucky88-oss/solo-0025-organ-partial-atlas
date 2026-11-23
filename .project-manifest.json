@@ -78,6 +78,11 @@
       "responsibility": "独奏支持的槽位证据和基音复测稳定性"
     },
     {
+      "id": "rehearsal",
+      "path": "pipeatlas/rehearsal.py",
+      "responsibility": "近席与远席分频带测量的共同支持对齐、净功率扣背景与合格判定"
+    },
+    {
       "id": "result_table",
       "path": "web/result-table.js",
       "responsibility": "结果表及结构化证据明细"
@@ -505,6 +510,44 @@
         "result_table",
         "harmonics",
         "allocation"
+      ]
+    },
+    {
+      "id": "rehearsal",
+      "name": "试录分频带比对",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.rehearsal",
+      "steps": [
+        "两席同名单同频带定义，按共同有证半开时间段对齐；线性功率先换算再扣背景",
+        "同一共同支持范围分别给出按时长加权的合格覆盖比例与远近席净能量总和之比"
+      ],
+      "success": "高频带 的 状态 为 \"verified\"，覆盖比例与净能量比同时给出且不互相代替",
+      "failure": "两席名单或频带口径不一致、非法测量返回 400；超限与共同支持不足不得发成合格",
+      "verification": "python3 -m pipeatlas.check_flow rehearsal",
+      "module_ids": [
+        "server",
+        "service",
+        "rehearsal",
+        "artifacts",
+        "result_table"
+      ]
+    },
+    {
+      "id": "rehearsal_evidence",
+      "name": "试录证据段",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.rehearsal_evidence",
+      "steps": [
+        "每个共同支持子段给出起止、两席净功率、远近功率比与记录编号",
+        "近席净功率为零时比值无定义；低于背景的子段不参与比值、能量与覆盖"
+      ],
+      "success": "低频带/2 的 远近功率比 为 2.0，保留强弱两子段证据",
+      "failure": "非法试录输入返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow rehearsal_evidence",
+      "module_ids": [
+        "server",
+        "service",
+        "rehearsal",
+        "artifacts",
+        "result_table"
       ]
     }
   ],

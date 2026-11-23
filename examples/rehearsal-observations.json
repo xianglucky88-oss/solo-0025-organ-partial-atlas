@@ -1,0 +1,18 @@
+{
+  "rehearsal": [
+    "低频带",
+    "state",
+    "over",
+    "中频带",
+    "state",
+    "short"
+  ],
+  "rehearsal_evidence": [
+    "低频带/2",
+    "ratio",
+    2.0,
+    "中频带/1",
+    "state",
+    "undefined"
+  ]
+}
