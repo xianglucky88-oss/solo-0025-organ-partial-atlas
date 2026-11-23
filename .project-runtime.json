@@ -7,8 +7,9 @@
     ".css",
     ".html"
   ],
-  "build_command": "python3 -m compileall -q pipeatlas && node --input-type=module --check < web/ui.js && node --input-type=module --check < web/chart.js && node --input-type=module --check < web/result-table.js && node --input-type=module --check < web/version-panel.js",
-  "testing": "deferred",
+  "build_command": "python3 -m compileall -q pipeatlas tests && node --input-type=module --check < web/ui.js && node --input-type=module --check < web/chart.js && node --input-type=module --check < web/result-table.js && node --input-type=module --check < web/version-panel.js",
+  "testing": "offline-regression",
+  "regression_command": "python3 -m tests.run_regression",
   "workflow_checks": [
     {
       "workflow_id": "target",
