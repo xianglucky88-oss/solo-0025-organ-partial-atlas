@@ -1,0 +1,164 @@
+{
+  "id": "北廊合奏",
+  "conditions": {
+    "reference": 20,
+    "temperature": 20,
+    "tolerance": 20,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "pipes": [
+    {
+      "id": "管甲",
+      "base": 200,
+      "maximum": 3
+    },
+    {
+      "id": "管副甲",
+      "base": 196,
+      "maximum": 1
+    },
+    {
+      "id": "管乙",
+      "base": 250,
+      "maximum": 2
+    },
+    {
+      "id": "管丙",
+      "base": 300,
+      "maximum": 2
+    },
+    {
+      "id": "管丁",
+      "base": 303,
+      "maximum": 2
+    },
+    {
+      "id": "管戊",
+      "base": 400,
+      "maximum": 2
+    },
+    {
+      "id": "管己",
+      "base": 500,
+      "maximum": 2
+    },
+    {
+      "id": "暗管",
+      "base": 600,
+      "maximum": 2
+    }
+  ],
+  "opened": [
+    "管甲",
+    "管副甲",
+    "管乙",
+    "管丙",
+    "管丁",
+    "管戊",
+    "管己"
+  ],
+  "peaks": [
+    {
+      "id": "峰换甲",
+      "hz": 198,
+      "amplitude": 0.9
+    },
+    {
+      "id": "峰争甲",
+      "hz": 196,
+      "amplitude": 0.7
+    },
+    {
+      "id": "峰换乙",
+      "hz": 250,
+      "amplitude": 0.8
+    },
+    {
+      "id": "峰强丙",
+      "hz": 300,
+      "amplitude": 0.8
+    },
+    {
+      "id": "峰强丁",
+      "hz": 303,
+      "amplitude": 0.8
+    },
+    {
+      "id": "峰挤丙",
+      "hz": 297,
+      "amplitude": 0.6
+    },
+    {
+      "id": "峰基戊",
+      "hz": 400,
+      "amplitude": 0.8
+    },
+    {
+      "id": "峰己甲",
+      "hz": 402,
+      "amplitude": 0.7
+    },
+    {
+      "id": "峰余戊",
+      "hz": 403,
+      "amplitude": 0.6
+    },
+    {
+      "id": "峰己乙",
+      "hz": 500,
+      "amplitude": 0.7
+    },
+    {
+      "id": "峰泛己",
+      "hz": 502.5,
+      "amplitude": 0.6
+    },
+    {
+      "id": "弱峰",
+      "hz": 200,
+      "amplitude": 0.1
+    },
+    {
+      "id": "旁峰",
+      "hz": 900,
+      "amplitude": 0.5
+    }
+  ],
+  "ensemble": {
+    "whole_group": true
+  },
+  "review": {
+    "takes": [
+      {
+        "id": "戊管隔离",
+        "temperature": 20,
+        "opened": [
+          "管戊"
+        ],
+        "peaks": [
+          {
+            "id": "单管基音",
+            "hz": 400,
+            "amplitude": 0.9
+          }
+        ]
+      },
+      {
+        "id": "丁管复测",
+        "temperature": 20,
+        "opened": [
+          "管丁"
+        ],
+        "peaks": [
+          {
+            "id": "丁基音",
+            "hz": 305,
+            "amplitude": 0.8
+          }
+        ]
+      }
+    ],
+    "stability_limit": 5
+  }
+}

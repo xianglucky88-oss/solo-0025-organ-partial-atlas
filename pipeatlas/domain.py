@@ -23,4 +23,11 @@ def parse(source):
     peaks = []
     for p in records(source.get('peaks'), '频峰', 360):
         peaks.append(dict(id=p['id'],hz=num(p.get('hz'),'频率',1,160000),amplitude=num(p.get('amplitude'),'幅值',0,100)))
-    return dict(pipes=pipes, opened=set(opened), peaks=peaks, reference=reference, ratio=ratio, floor=floor, tolerance=tolerance,passband=passband)
+    whole_group = False
+    if 'ensemble' in source:
+        ensemble = obj(source.get('ensemble'), '整组归属设置')
+        flag = ensemble.get('whole_group', False)
+        invariant(isinstance(flag, bool), '整组归属开关应为布尔值')
+        whole_group = flag
+    return dict(pipes=pipes, opened=set(opened), peaks=peaks, reference=reference, ratio=ratio, floor=floor,
+                tolerance=tolerance, passband=passband, whole_group=whole_group)

@@ -1,0 +1,30 @@
+{
+  "id": "北廊合奏",
+  "conditions": {
+    "reference": 20,
+    "temperature": 20,
+    "tolerance": 20,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "pipes": [
+    {
+      "id": "管甲",
+      "base": 200,
+      "maximum": 3
+    }
+  ],
+  "opened": [
+    "管甲"
+  ],
+  "peaks": [
+    {
+      "id": "峰甲",
+      "hz": 200,
+      "amplitude": 0.9
+    }
+  ],
+  "ensemble": {
+    "whole_group": "yes"
+  }
+}

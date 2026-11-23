@@ -17,10 +17,15 @@ python3 -m pipeatlas.server
 ```sh
 python3 -m pipeatlas.check_flow target
 python3 -m pipeatlas.check_flow clusters
+python3 -m pipeatlas.check_flow ensemble
 python3 -m pipeatlas.check_flow export
 ```
 
 这些命令在临时成果库和临时回环端口运行实际 HTTP 接口，分别核对样例、对照和拒绝路径。`examples` 保存业务示例及可人工核算的观测点。完整命令见 `.project-runtime.json`；自动化测试套件留置，不包含私有验收测试、缺陷任务或参考解答。
+
+### 整组归属模式
+
+输入顶层加 `"ensemble": {"whole_group": true}` 即可开启（界面用「整组样例」载入）。候选仍按温标、幅值门槛、开管名单和音分容差生成；解算按连通组求可同时归属的最大峰数，逐峰报告在所有最优解释里可占的槽、能否不指认，以及是否存在每个最优解释都指向的唯一必然槽。只有唯一必然的峰作为可信实测进入缺测、调律与交接，争用组同时给出最少未归峰数和无法进入任何最优解释的必死候选边。省略该字段或置 `false` 时完全沿用旧的独占归属结果。运行 `python3 -m pipeatlas.check_flow ensemble` 可核对整组口径、必死边、可信基音交接及关闭模式后的兼容性。
 
 ### 扩展复核
 

@@ -1,0 +1,42 @@
+{
+  "ensemble": [
+    "峰余戊",
+    "may_unassign",
+    true,
+    "峰换甲",
+    "state",
+    "forced"
+  ],
+  "clusters": [
+    "峰强丁",
+    "deficit",
+    1,
+    "峰强丁",
+    "state",
+    "resolved"
+  ],
+  "assign": [
+    "峰争甲",
+    "state",
+    "assigned",
+    "峰强丁",
+    "state",
+    "assigned"
+  ],
+  "tune": [
+    "管甲",
+    "state",
+    "adjust",
+    "管丁",
+    "state",
+    "adjust"
+  ],
+  "handoff": [
+    "管戊",
+    "state",
+    "review",
+    "管丁",
+    "state",
+    "pending"
+  ]
+}

@@ -43,6 +43,10 @@
       "command": "python3 -m pipeatlas.check_flow clusters"
     },
     {
+      "workflow_id": "ensemble",
+      "command": "python3 -m pipeatlas.check_flow ensemble"
+    },
+    {
       "workflow_id": "compare",
       "command": "python3 -m pipeatlas.check_flow compare"
     },

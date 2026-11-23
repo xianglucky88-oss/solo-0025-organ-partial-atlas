@@ -90,6 +90,21 @@
       ]
     },
     {
+      "id": "ensemble",
+      "label": "整组归属",
+      "columns": [
+        "id",
+        "hz",
+        "state",
+        "component",
+        "slots",
+        "forced",
+        "may_unassign",
+        "dead_edges"
+      ],
+      "optional": true
+    },
+    {
       "id": "takes",
       "label": "复测批次",
       "columns": [
@@ -195,6 +210,10 @@
     "removed": "已移除",
     "changed": "已变化",
     "oversubscribed": "峰多于槽",
+    "resolved": "必然归位",
+    "forced": "唯一必然",
+    "flexible": "存在歧义",
+    "idle": "无候选",
     "fits": "有产量",
     "split": "跨带分摊",
     "kept": "保留",
@@ -233,6 +252,12 @@
     "pipe": "音管",
     "rank": "复测顺序",
     "slots": "候选槽数",
+    "component": "争用组",
+    "forced": "唯一必然槽",
+    "may_unassign": "可不指认",
+    "dead_edges": "必死候选边",
+    "matched": "最大归属峰数",
+    "deficit": "最少未归峰数",
     "stage": "归约阶段",
     "state": "状态",
     "before": "早版",

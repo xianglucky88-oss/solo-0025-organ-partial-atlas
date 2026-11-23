@@ -22,7 +22,7 @@ function note(text, kind = '') {
   $('status').dataset.kind = kind;
 }
 
-const stageButtons = () => document.querySelectorAll('#stages button, #review-stages button');
+const stageButtons = () => document.querySelectorAll('#stages button, #review-stages button, #ensemble-stages button');
 
 function renderOperation(next) {
   mode = next;
@@ -40,6 +40,9 @@ function show(next) {
   const review = Object.hasOwn(next.source, 'review');
   $('review-pane').hidden = !review;
   if (!review) $('review-pane').open = false;
+  const wholeGroup = Boolean(next.source.ensemble && next.source.ensemble.whole_group);
+  $('ensemble-pane').hidden = !wholeGroup;
+  if (!wholeGroup) $('ensemble-pane').open = false;
   renderOperation(Object.hasOwn(next.outputs, mode) ? mode : model.defaultOperation);
 }
 
@@ -72,9 +75,13 @@ async function choose(path) {
   show(next);
   if (path === 'review-sample') {
     $('review-pane').open = true;
-    renderOperation(model.operations.find((op) => op.optional).id);
+    renderOperation(model.operations.find((op) => op.optional && op.id !== 'ensemble').id);
   }
-  note(({ sample:'样例已处理', alternate:'对照样例已处理', 'review-sample':'复核样例已处理' })[path]);
+  if (path === 'ensemble-sample') {
+    $('ensemble-pane').open = true;
+    renderOperation('ensemble');
+  }
+  note(({ sample:'样例已处理', alternate:'对照样例已处理', 'review-sample':'复核样例已处理', 'ensemble-sample':'整组样例已处理' })[path]);
 }
 
 function bind(id, action, event = 'click') {
@@ -89,10 +96,12 @@ guarded(async () => {
     button.textContent = spec.label;
     button.dataset.mode = spec.id;
     button.addEventListener('click', () => packet && renderOperation(spec.id));
-    $(spec.optional ? 'review-stages' : 'stages').append(button);
+    const target = spec.id === 'ensemble' ? 'ensemble-stages' : spec.optional ? 'review-stages' : 'stages';
+    $(target).append(button);
   }
   bind('sample', () => choose('sample'));
   bind('review-sample', () => choose('review-sample'));
+  bind('ensemble-sample', () => choose('ensemble-sample'));
   bind('alternate', () => choose('alternate'));
   bind('evaluate', async () => {
     show(await request('evaluate', source()));

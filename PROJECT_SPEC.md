@@ -24,6 +24,7 @@
 | 调律核对 | `POST /pipeatlas/api/evaluate 的 outputs.tune` | 独管丙 的 状态 为 "adjust" |
 | 复测清单 | `POST /pipeatlas/api/evaluate 的 outputs.revisit` | 背管丁 的 复测顺序 为 1 |
 | 频峰争用组 | `POST /pipeatlas/api/evaluate 的 outputs.clusters` | 峰乙 的 数量 为 2 |
+| 整组归属 | `POST /pipeatlas/api/evaluate 的 outputs.ensemble` | 峰余戊 的 可不指认 为 true |
 | 归属差分 | `POST /pipeatlas/api/compare` | 异版产生差异，同版无差异，跨对象拒绝 |
 | 封存版本 | `POST /pipeatlas/api/seal` | 同输入仅写入一次，旧版不随对照改变 |
 | 导出交接 | `GET /pipeatlas/api/export/<摘要>` | 下载头有效且内容完整保留历史快照 |
@@ -38,6 +39,8 @@
 - `pipeatlas/service.py`：串联归约、比对和历史读取。
 - `pipeatlas/server.py`：本机 HTTP 及静态界面入口。
 - `web/ui.js`：归约阶段、图形、归档与交互。
+- `pipeatlas/allocation.py`：旧版独占归属的唯一边判定。
+- `pipeatlas/matching.py`：整组归属的最大匹配、连通组与最优解释共性枚举。
 - `pipeatlas/reconcile.py`：联合原始归约事实与业务判定，推导频峰争用组。
 
 浏览器显示来源和判定结果；发布决定由服务端归约。自动化测试套件留置。每条工作流的有界核对命令见 `.project-runtime.json`。
@@ -53,3 +56,12 @@
 - `harmonics` 相对泛音残差：缺同管独占基音时不输出相对残差。
 - `handoff` 调律交接：区分合奏未决、单管线索、复测漂移与可信交接。
 - `silence` 开管缺测账：只数实际开管的复测，区分缺测与未开。
+
+## 整组归属模式
+
+顶层可选 `ensemble`，其布尔字段 `whole_group` 缺省或为 `false` 时完全沿用独占归属旧口径，输出与旧版逐字段一致。置 `true` 后仍由原温标、幅值门槛、开管名单与音分容差生成候选边，但归属解算改为整组口径：每个频峰与每个泛音槽在任一归属方案中最多使用一次，频峰允许在最优解释里不被指认；系统不选取最小误差或字典序方案，而枚举全部最大基数匹配的共性。
+
+- 按候选二部图的连通组解算可同时归属的最大峰数；`clusters` 每组给出 `matched` 最大归属峰数、`deficit` 至少无法同时归属的峰数，以及 `dead_edges` 完全无法进入任何最优解释的候选边，不把两个不同解释的槽合成同一次测量。
+- 可选阶段 `ensemble` 按峰报告：`slots` 为该峰在达到最大峰数时可占据的全部槽，`may_unassign` 表示它是否能在某个最优解释中不被指认，`forced` 仅在每个最优解释都指到同一槽时给出该唯一必然槽，状态取 `forced`（唯一必然）、`flexible`（存在歧义）或 `idle`（无候选）。
+- 只有 `forced` 峰作为可信实测写入 `assign`，并据此重算缺测、调律与复测顺序；可信基音缺失时仍不给调律偏差。`handoff`、`stability` 等复核结果与复测片段统一采用这一可信基音口径，已确认归属不再引用被否决的候选。
+- `examples/ensemble-sample.json` 给出有效输入，含交替可换峰、只能强制归位且带必死边的峰，以及可归不同槽或可不归的基音峰；`ensemble-alternate.json` 为同对象的另一有效输入，`ensemble-reject.json` 为应被阻止的输入。
