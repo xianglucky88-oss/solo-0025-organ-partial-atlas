@@ -1,3 +1,4 @@
+from .bench import read_trials, recovery_segments
 from .contract import num
 from .sessions import read_takes, take_scope
 from .take_evidence import isolated_support, stability
@@ -11,4 +12,5 @@ def analyze_review(review, model, facts, outputs):
     isolated = isolated_support(takes, outputs)
     return dict(takes=take_scope(takes), isolated=isolated, stability=stable,
                 pressure=slot_pressure(facts, outputs), harmonics=harmonic_residuals(outputs),
-                handoff=tune_handoff(outputs, stable, isolated), silence=silent_openings(takes, outputs, model['pipes']))
+                handoff=tune_handoff(outputs, stable, isolated), silence=silent_openings(takes, outputs, model['pipes']),
+                recovery=recovery_segments(read_trials(review, model)))

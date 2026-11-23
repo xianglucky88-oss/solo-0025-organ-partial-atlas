@@ -78,6 +78,11 @@
       "responsibility": "独奏支持的槽位证据和基音复测稳定性"
     },
     {
+      "id": "bench",
+      "path": "pipeatlas/bench.py",
+      "responsibility": "试录压差序列归约与负载段风压恢复判定"
+    },
+    {
       "id": "result_table",
       "path": "web/result-table.js",
       "responsibility": "结果表及结构化证据明细"
@@ -505,6 +510,27 @@
         "result_table",
         "harmonics",
         "allocation"
+      ]
+    },
+    {
+      "id": "recovery",
+      "name": "风压恢复",
+      "entry": "POST /pipeatlas/api/evaluate → outputs.recovery",
+      "steps": [
+        "同一最低压差下区分及时恢复与恢复延期，中间缺测令延期无法确证时给待查",
+        "把归约值、状态和来源明细写入 outputs.recovery，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m pipeatlas.check_flow recovery",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "review",
+        "bench",
+        "artifacts",
+        "result_table"
       ]
     }
   ],

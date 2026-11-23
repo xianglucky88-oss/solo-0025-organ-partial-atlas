@@ -54,5 +54,13 @@
     "低音甲",
     "state",
     "blind"
+  ],
+  "recovery": [
+    "阵风短跌/合奏负载",
+    "crossing",
+    19,
+    "断档待查/合奏负载",
+    "state",
+    "pending"
   ]
 }

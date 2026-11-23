@@ -173,6 +173,21 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "recovery",
+      "label": "风压恢复",
+      "columns": [
+        "id",
+        "opened",
+        "baseline",
+        "level",
+        "crossing",
+        "confirmed",
+        "state",
+        "evidence"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -211,7 +226,12 @@
     "shared": "多处复用",
     "same": "口径一致",
     "refined": "区间收窄",
-    "recovered": "恢复量化",
+    "recovered": "及时恢复",
+    "delayed": "恢复延期",
+    "blocked": "不予结论",
+    "window-gap": "基准窗断档",
+    "window-roster": "基准窗内换载",
+    "contradictory": "同刻变更矛盾",
     "carried": "传播缺测",
     "local": "局部缺测",
     "opposed": "方向不符",
@@ -267,7 +287,19 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "opened": "开管名单",
+    "baseline": "基准压差",
+    "level": "恢复线",
+    "crossing": "越过时刻",
+    "confirmed": "确认时刻",
+    "window": "窗口",
+    "value": "取值",
+    "samples": "样点数",
+    "gap": "缺口",
+    "reason": "原因",
+    "events": "相关变更",
+    "at": "时刻"
   },
   "reconciliation": "clusters",
   "defaultOperation": "assign"

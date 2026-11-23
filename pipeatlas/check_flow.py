@@ -63,6 +63,47 @@ def audit(port, flow):
             rows = request(port, 'evaluate', probe)[0]['outputs'][flow]
             observe(rows, '暗管戊', 'state', 'covered')
             observe(rows, '暗管戊', 'evidence', dict(base='closed', observed=['暗管单开'], uncertain=[], absent=[]))
+        if flow == 'recovery':
+            rows = original['outputs'][flow]
+            observe(rows, '阵风短跌/合奏负载', 'baseline', 320)
+            observe(rows, '阵风短跌/合奏负载', 'level', 280)
+            observe(rows, '阵风短跌/合奏负载', 'confirmed', 25)
+            observe(rows, '重载迟迟/合奏负载', 'state', 'delayed')
+            observe(rows, '重载迟迟/合奏负载', 'crossing', None)
+            observe(rows, '中途换载/第一段负载', 'confirmed', 28)
+            observe(rows, '中途换载/第二段负载', 'baseline', 300)
+            observe(rows, '中途换载/第二段负载', 'level', 262.5)
+            others = alternate['outputs'][flow]
+            observe(others, '基准残缺/合奏负载', 'state', 'blocked')
+            observe(others, '同刻矛盾/名单甲', 'state', 'blocked')
+            observe(others, '同刻矛盾/名单乙', 'state', 'blocked')
+            hole = next(r for r in others if r['id'] == '断档待查/合奏负载')['evidence']['gap']
+            if hole != [20, 42]:
+                raise ValueError(f'断档待查的阻断缺口为 {hole!r}，应为 [20, 42]')
+            trial = dict(id='截断核查', gap=4,
+                         series=[dict(t=t, pa=p) for t, p in [
+                             (0, 320), (2, 320), (4, 320), (6, 320), (8, 320), (10, 320),
+                             (14, 250), (16, 210), (18, 270), (20, 290), (22, 295),
+                             (24, 300), (26, 298), (28, 297)]],
+                         events=[dict(id='合奏负载', t=12, opened=['低音甲', '高音乙'],
+                                      baseline=[0, 10], floor=240, ratio=0.875, hold=6, deadline=40),
+                                 dict(id='提前换载', t=20, opened=['低音甲'],
+                                      baseline=[14, 18], floor=240, ratio=0.875, hold=6, deadline=40)])
+            probe = dict(data, review=dict(data['review'], trials=[trial]))
+            truncated = request(port, 'evaluate', probe)[0]['outputs'][flow]
+            observe(truncated, '截断核查/合奏负载', 'state', 'pending')
+            observe(truncated, '截断核查/提前换载', 'state', 'recovered')
+            observe(truncated, '截断核查/提前换载', 'level', 240)
+            observe(truncated, '截断核查/提前换载', 'baseline', 235)
+            hole = next(r for r in truncated if r['id'] == '截断核查/合奏负载')['evidence']['gap']
+            if hole != [18, 52]:
+                raise ValueError(f'截断核查的阻断缺口为 {hole!r}，应为 [18, 52]')
+            event = trial['events'][0]
+            for bad_trial in (dict(trial, events=[dict(event, baseline=[8, 14])]),
+                              dict(trial, series=[dict(t=0, pa=300), dict(t=0, pa=301)]),
+                              dict(trial, events=[dict(event, opened=['未知管'])]),
+                              dict(trial, events=[dict(event, ratio=0)])):
+                request(port, 'evaluate', dict(data, review=dict(data['review'], trials=[bad_trial])), status=400)
         return
     request(port,'seal',bad,status=400)
     left = request(port,'seal',data)[0]
