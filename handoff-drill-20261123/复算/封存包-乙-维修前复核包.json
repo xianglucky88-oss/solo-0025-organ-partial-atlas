@@ -1,0 +1,509 @@
+{
+  "project": "pipeatlas",
+  "schema": 1,
+  "subject": "东厢管风琴",
+  "source": {
+    "id": "东厢管风琴",
+    "conditions": {
+      "reference": 20,
+      "temperature": 20,
+      "tolerance": 18,
+      "passband": 5,
+      "floor": 0.2
+    },
+    "pipes": [
+      {
+        "id": "换管槽",
+        "base": 200,
+        "maximum": 2
+      },
+      {
+        "id": "沿用槽",
+        "base": 300,
+        "maximum": 2
+      },
+      {
+        "id": "无凭槽",
+        "base": 450,
+        "maximum": 2
+      }
+    ],
+    "opened": [
+      "换管槽",
+      "沿用槽",
+      "无凭槽"
+    ],
+    "peaks": [
+      {
+        "id": "主峰换",
+        "hz": 200,
+        "amplitude": 0.8
+      },
+      {
+        "id": "二倍换",
+        "hz": 400,
+        "amplitude": 0.6
+      },
+      {
+        "id": "主峰沿",
+        "hz": 300,
+        "amplitude": 0.8
+      },
+      {
+        "id": "二倍沿",
+        "hz": 600,
+        "amplitude": 0.6
+      },
+      {
+        "id": "主峰凭",
+        "hz": 450,
+        "amplitude": 0.7
+      },
+      {
+        "id": "二倍凭",
+        "hz": 900,
+        "amplitude": 0.5
+      }
+    ],
+    "review": {
+      "stability_limit": 5,
+      "takes": [
+        {
+          "id": "旧-换管槽单录",
+          "temperature": 20,
+          "opened": [
+            "换管槽"
+          ],
+          "peaks": [
+            {
+              "id": "旧-换管基音",
+              "hz": 200,
+              "amplitude": 0.8
+            }
+          ]
+        },
+        {
+          "id": "旧-沿用槽单录",
+          "temperature": 20,
+          "opened": [
+            "沿用槽"
+          ],
+          "peaks": [
+            {
+              "id": "旧-沿用基音",
+              "hz": 300,
+              "amplitude": 0.8
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "source_digest": "75c7c4926b8f2acfe35601e3b464f797114904233afe39887c04ac8f8ec1ba29",
+  "outputs": {
+    "target": [
+      {
+        "id": "换管槽",
+        "hz": 200.0,
+        "state": "open"
+      },
+      {
+        "id": "沿用槽",
+        "hz": 300.0,
+        "state": "open"
+      },
+      {
+        "id": "无凭槽",
+        "hz": 450.0,
+        "state": "open"
+      }
+    ],
+    "candidate": [
+      {
+        "id": "主峰换",
+        "hz": 200,
+        "amplitude": 0.8,
+        "count": 1,
+        "evidence": [
+          "换管槽/1"
+        ],
+        "state": "candidate"
+      },
+      {
+        "id": "二倍换",
+        "hz": 400,
+        "amplitude": 0.6,
+        "count": 1,
+        "evidence": [
+          "换管槽/2"
+        ],
+        "state": "candidate"
+      },
+      {
+        "id": "主峰沿",
+        "hz": 300,
+        "amplitude": 0.8,
+        "count": 1,
+        "evidence": [
+          "沿用槽/1"
+        ],
+        "state": "candidate"
+      },
+      {
+        "id": "二倍沿",
+        "hz": 600,
+        "amplitude": 0.6,
+        "count": 1,
+        "evidence": [
+          "沿用槽/2"
+        ],
+        "state": "candidate"
+      },
+      {
+        "id": "主峰凭",
+        "hz": 450,
+        "amplitude": 0.7,
+        "count": 1,
+        "evidence": [
+          "无凭槽/1"
+        ],
+        "state": "candidate"
+      },
+      {
+        "id": "二倍凭",
+        "hz": 900,
+        "amplitude": 0.5,
+        "count": 1,
+        "evidence": [
+          "无凭槽/2"
+        ],
+        "state": "candidate"
+      }
+    ],
+    "assign": [
+      {
+        "id": "主峰换",
+        "hz": 200,
+        "pipe": "换管槽",
+        "harmonic": 1,
+        "deviation": 0.0,
+        "state": "assigned"
+      },
+      {
+        "id": "二倍换",
+        "hz": 400,
+        "pipe": "换管槽",
+        "harmonic": 2,
+        "deviation": 0.0,
+        "state": "assigned"
+      },
+      {
+        "id": "主峰沿",
+        "hz": 300,
+        "pipe": "沿用槽",
+        "harmonic": 1,
+        "deviation": 0.0,
+        "state": "assigned"
+      },
+      {
+        "id": "二倍沿",
+        "hz": 600,
+        "pipe": "沿用槽",
+        "harmonic": 2,
+        "deviation": 0.0,
+        "state": "assigned"
+      },
+      {
+        "id": "主峰凭",
+        "hz": 450,
+        "pipe": "无凭槽",
+        "harmonic": 1,
+        "deviation": 0.0,
+        "state": "assigned"
+      },
+      {
+        "id": "二倍凭",
+        "hz": 900,
+        "pipe": "无凭槽",
+        "harmonic": 2,
+        "deviation": 0.0,
+        "state": "assigned"
+      }
+    ],
+    "conflict": [],
+    "coverage": [
+      {
+        "id": "换管槽",
+        "state": "covered",
+        "count": 2,
+        "evidence": [
+          "主峰换",
+          "二倍换"
+        ]
+      },
+      {
+        "id": "沿用槽",
+        "state": "covered",
+        "count": 2,
+        "evidence": [
+          "主峰沿",
+          "二倍沿"
+        ]
+      },
+      {
+        "id": "无凭槽",
+        "state": "covered",
+        "count": 2,
+        "evidence": [
+          "主峰凭",
+          "二倍凭"
+        ]
+      }
+    ],
+    "tune": [
+      {
+        "id": "换管槽",
+        "state": "ready",
+        "deviation": 0.0,
+        "evidence": "主峰换"
+      },
+      {
+        "id": "沿用槽",
+        "state": "ready",
+        "deviation": 0.0,
+        "evidence": "主峰沿"
+      },
+      {
+        "id": "无凭槽",
+        "state": "ready",
+        "deviation": 0.0,
+        "evidence": "主峰凭"
+      }
+    ],
+    "revisit": [],
+    "clusters": [],
+    "takes": [
+      {
+        "id": "旧-换管槽单录",
+        "count": 1,
+        "assigned": 1,
+        "pending": 0,
+        "state": "single",
+        "evidence": [
+          "换管槽"
+        ]
+      },
+      {
+        "id": "旧-沿用槽单录",
+        "count": 1,
+        "assigned": 1,
+        "pending": 0,
+        "state": "single",
+        "evidence": [
+          "沿用槽"
+        ]
+      }
+    ],
+    "isolated": [],
+    "stability": [
+      {
+        "id": "换管槽",
+        "count": 2,
+        "spread": 0.0,
+        "state": "stable",
+        "evidence": {
+          "基线": 0.0,
+          "复测/旧-换管槽单录": 0.0
+        }
+      },
+      {
+        "id": "无凭槽",
+        "count": 1,
+        "spread": null,
+        "state": "pending",
+        "evidence": {
+          "基线": 0.0
+        }
+      },
+      {
+        "id": "沿用槽",
+        "count": 2,
+        "spread": 0.0,
+        "state": "stable",
+        "evidence": {
+          "基线": 0.0,
+          "复测/旧-沿用槽单录": 0.0
+        }
+      }
+    ],
+    "pressure": [
+      {
+        "id": "换管槽/1",
+        "count": 1,
+        "exclusive": 1,
+        "state": "assigned",
+        "evidence": {
+          "主峰换": 0.0
+        }
+      },
+      {
+        "id": "换管槽/2",
+        "count": 1,
+        "exclusive": 1,
+        "state": "assigned",
+        "evidence": {
+          "二倍换": 0.0
+        }
+      },
+      {
+        "id": "无凭槽/1",
+        "count": 1,
+        "exclusive": 1,
+        "state": "assigned",
+        "evidence": {
+          "主峰凭": 0.0
+        }
+      },
+      {
+        "id": "无凭槽/2",
+        "count": 1,
+        "exclusive": 1,
+        "state": "assigned",
+        "evidence": {
+          "二倍凭": 0.0
+        }
+      },
+      {
+        "id": "沿用槽/1",
+        "count": 1,
+        "exclusive": 1,
+        "state": "assigned",
+        "evidence": {
+          "主峰沿": 0.0
+        }
+      },
+      {
+        "id": "沿用槽/2",
+        "count": 1,
+        "exclusive": 1,
+        "state": "assigned",
+        "evidence": {
+          "二倍沿": 0.0
+        }
+      }
+    ],
+    "harmonics": [
+      {
+        "id": "二倍换",
+        "pipe": "换管槽",
+        "harmonic": 2,
+        "deviation": 0.0,
+        "relative": 0.0,
+        "state": "known",
+        "evidence": {
+          "base": "主峰换",
+          "peak": "二倍换"
+        }
+      },
+      {
+        "id": "二倍沿",
+        "pipe": "沿用槽",
+        "harmonic": 2,
+        "deviation": 0.0,
+        "relative": 0.0,
+        "state": "known",
+        "evidence": {
+          "base": "主峰沿",
+          "peak": "二倍沿"
+        }
+      },
+      {
+        "id": "二倍凭",
+        "pipe": "无凭槽",
+        "harmonic": 2,
+        "deviation": 0.0,
+        "relative": 0.0,
+        "state": "known",
+        "evidence": {
+          "base": "主峰凭",
+          "peak": "二倍凭"
+        }
+      }
+    ],
+    "handoff": [
+      {
+        "id": "换管槽",
+        "deviation": 0.0,
+        "state": "ready",
+        "evidence": {
+          "baseline": "主峰换",
+          "stability": "stable",
+          "isolated_lead": false
+        }
+      },
+      {
+        "id": "沿用槽",
+        "deviation": 0.0,
+        "state": "ready",
+        "evidence": {
+          "baseline": "主峰沿",
+          "stability": "stable",
+          "isolated_lead": false
+        }
+      },
+      {
+        "id": "无凭槽",
+        "deviation": 0.0,
+        "state": "pending",
+        "evidence": {
+          "baseline": "主峰凭",
+          "stability": "pending",
+          "isolated_lead": false
+        }
+      }
+    ],
+    "silence": [
+      {
+        "id": "换管槽",
+        "count": 1,
+        "observed": 1,
+        "state": "covered",
+        "evidence": {
+          "base": "covered",
+          "observed": [
+            "旧-换管槽单录"
+          ],
+          "uncertain": [],
+          "absent": []
+        }
+      },
+      {
+        "id": "沿用槽",
+        "count": 1,
+        "observed": 1,
+        "state": "covered",
+        "evidence": {
+          "base": "covered",
+          "observed": [
+            "旧-沿用槽单录"
+          ],
+          "uncertain": [],
+          "absent": []
+        }
+      },
+      {
+        "id": "无凭槽",
+        "count": 0,
+        "observed": 0,
+        "state": "blind",
+        "evidence": {
+          "base": "covered",
+          "observed": [],
+          "uncertain": [],
+          "absent": []
+        }
+      }
+    ]
+  },
+  "digest": "378b46df26a8001d27755715ffd8d2fc3f2dab1fde1209097192312464bde8be"
+}

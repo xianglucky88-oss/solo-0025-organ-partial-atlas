@@ -1,0 +1,111 @@
+{
+  "id": "东厢管风琴",
+  "conditions": {
+    "reference": 20,
+    "temperature": 20,
+    "tolerance": 18,
+    "passband": 5,
+    "floor": 0.2
+  },
+  "pipes": [
+    {
+      "id": "换管槽",
+      "base": 200,
+      "maximum": 2
+    },
+    {
+      "id": "沿用槽",
+      "base": 300,
+      "maximum": 2
+    },
+    {
+      "id": "无凭槽",
+      "base": 450,
+      "maximum": 2
+    }
+  ],
+  "opened": [
+    "换管槽",
+    "沿用槽",
+    "无凭槽"
+  ],
+  "peaks": [
+    {
+      "id": "主峰换",
+      "hz": 200,
+      "amplitude": 0.8
+    },
+    {
+      "id": "二倍换",
+      "hz": 400,
+      "amplitude": 0.6
+    },
+    {
+      "id": "主峰沿",
+      "hz": 300.7,
+      "amplitude": 0.8
+    },
+    {
+      "id": "二倍沿",
+      "hz": 600.5,
+      "amplitude": 0.6
+    },
+    {
+      "id": "主峰凭",
+      "hz": 450.6,
+      "amplitude": 0.7
+    },
+    {
+      "id": "二倍凭",
+      "hz": 900.9,
+      "amplitude": 0.5
+    }
+  ],
+  "review": {
+    "stability_limit": 5,
+    "takes": [
+      {
+        "id": "新-换管槽甲录",
+        "temperature": 21,
+        "opened": [
+          "换管槽"
+        ],
+        "peaks": [
+          {
+            "id": "新-甲基音",
+            "hz": 200.6,
+            "amplitude": 0.8
+          }
+        ]
+      },
+      {
+        "id": "新-换管槽乙录",
+        "temperature": 20,
+        "opened": [
+          "换管槽"
+        ],
+        "peaks": [
+          {
+            "id": "新-乙基音",
+            "hz": 200.3,
+            "amplitude": 0.8
+          }
+        ]
+      },
+      {
+        "id": "新-沿用槽单录",
+        "temperature": 21,
+        "opened": [
+          "沿用槽"
+        ],
+        "peaks": [
+          {
+            "id": "新-沿用基音",
+            "hz": 300.5,
+            "amplitude": 0.8
+          }
+        ]
+      }
+    ]
+  }
+}
